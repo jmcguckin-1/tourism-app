@@ -41,7 +41,19 @@
 		<dependency>
     <groupId>com.google.firebase</groupId>
     <artifactId>firebase-admin</artifactId>
-    <version>9.1.1</version> <!-- Check for the latest version -->
+    <version>9.1.1</version>
+</dependency>
+
+		<dependency>
+  <groupId>com.google.auth</groupId>
+  <artifactId>google-auth-library-oauth2-http</artifactId>
+  <version>1.19.0</version>
+</dependency>
+
+<dependency>
+  <groupId>com.google.cloud</groupId>
+  <artifactId>google-cloud-firestore</artifactId>
+  <version>3.29.1</version>
 </dependency>
 		<!-- end::tests[] -->
 	</dependencies>
