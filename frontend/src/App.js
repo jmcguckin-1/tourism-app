@@ -2,6 +2,10 @@ import logo from './logo.svg';
 import './App.css';
 import {useEffect, useState} from 'react';
 import { initializeApp } from "firebase/app";
+import { Routes, Route } from 'react-router-dom';
+import Profile from "./pages/Profile.js";
+import BookingPlanner from "./pages/BookingPlanner.js";
+import FlightPlanner from "./pages/FlightPlanner.js";
 
 function App() {
 
@@ -29,23 +33,11 @@ const app = initializeApp(firebaseConfig);
     }, [])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <p>{name}</p>
-      </header>
-    </div>
+        <Routes>
+    <Route path='/bookings' element={<BookingPlanner />} />
+      <Route path='/flights' element={<FlightPlanner />}/>
+    <Route path='/profile' element={<Profile />}/>
+  </Routes>
   );
 }
 
