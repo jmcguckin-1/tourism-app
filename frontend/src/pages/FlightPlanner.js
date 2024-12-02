@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import {useState, useEffect} from 'react';
 import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
+import background from "../background.jpg";
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
@@ -10,15 +11,9 @@ function FlightPlanner(){
     const [numAdults, setNumAdults] = useState("");
     const [numChildren, setNumChildren] = useState("");
     const [value, onChange] = useState("");
+    const [values, setValues] = useState([]);
 
    function sendData(){
-       let option2 = document.getElementById('option2');
-       setArrival(option2[this.selectedIndex].innerHTML);
-       let option1 = document.getElementById('option1');
-       setDA(option1[this.selectedIndex].innerHTML);
-       console.log(departingAirport);
-       console.log(arrivalAirport);
-       console.log(value);
       fetch("/secureFlights?a1=" + departingAirport + "&a2=" + arrivalAirport + "&a3=" + value)
       .then(response => response.json())
       .then(data => {
@@ -26,16 +21,20 @@ function FlightPlanner(){
       })
    }
 
+   function setChoices(x){
+        let newValues = [];
+       for (let i=0; i<myData.length; i++){
+            if(myData[i]['country_name'].includes(x)){
+                newValues.push(myData[i]);
+            }
+       }
+       setValues(newValues);
+   }
+
     return (
         <div>
+        <img src={background} id='bg'/>
         <NavBar/>
-        {/*
-            Departing airport
-            Arrival Airport
-            Start Date
-            End Date
-            Number of Passengers
-        */}
         <div id='formEntry'>
          <p>Destination</p>
          <input type='text'/>
@@ -53,10 +52,10 @@ function FlightPlanner(){
 </select>
 
         <p>Departing:</p>
-        <input type='text'/>
+        <input type='text' id='departing' onChange={e => setChoices(e.target.value)}/>
 <select id='option1'>
          <>
-    {myData.map(function(details) {
+    {values.map(function(details) {
       return (
         <option key={details.airport_id}>
              {details.country_name}
@@ -73,6 +72,7 @@ function FlightPlanner(){
         </div>
         <button onClick={sendData}>Send</button>
 
+        // radio buttons (direct flight, one way etc.)
         </div>
     )
 }
