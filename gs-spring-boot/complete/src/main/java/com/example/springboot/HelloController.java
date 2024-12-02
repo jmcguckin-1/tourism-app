@@ -3,6 +3,7 @@ package com.example.springboot;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -26,6 +27,16 @@ public void setDb(Firestore db){
 public Firestore getDb(){
     return this.db;
 }
+
+@GetMapping("/secureFlights")
+@ResponseBody
+    public void secureFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("destination", arrivalAirport);
+        map.put("start", departureAirport);
+        map.put("date", startDate);
+        System.out.println(Arrays.asList(map));
+    }
 
 //     @GetMapping("/getDetails")
 //     @ResponseBody

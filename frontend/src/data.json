@@ -1,0 +1,15 @@
+[
+  {
+    "airport_id": "1",
+    "airport_name": "John F. Kennedy Airport",
+    "city_iata_code": "JFK",
+    "country_name": "New York, United States"
+  },
+
+   {
+    "airport_id": "2",
+    "airport_name": "Dublin International",
+    "city_iata_code": "DUB",
+    "country_name": "Dublin, Ireland"
+  }
+]

@@ -2,34 +2,29 @@ import NavBar from "../components/NavBar.js";
 import Calendar from 'react-calendar';
 import {useState, useEffect} from 'react';
 import 'react-calendar/dist/Calendar.css';
+import myData from '../data.json';
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
     const [arrivalAirport, setArrival] = useState("");
     const [numAdults, setNumAdults] = useState("");
     const [numChildren, setNumChildren] = useState("");
-    const [currentData ,setData] = useState([]);
+    const [value, onChange] = useState("");
 
-   useEffect(() =>{
-    fetch("https://api.aviationstack.com/v1/airports?access_key=1b199b799a069f9f542aa7ef36149182", {
-        'method': 'GET',
-        'type': 'application/json'
-    })
-
-    .then(response => response.json())
-    .then(data => {
-        let result = data['data'];
-        let newData = [];
-        for (let i=0; i<50; i++){
-            console.log(result[i]['country_name']);
-            if (result[i]['country_name'] != null){
-                newData.push(result[i]);
-            }
-            }
-        setData(newData);
-
-    })
-   },[])
+   function sendData(){
+       let option2 = document.getElementById('option2');
+       setArrival(option2[this.selectedIndex].innerHTML);
+       let option1 = document.getElementById('option1');
+       setDA(option1[this.selectedIndex].innerHTML);
+       console.log(departingAirport);
+       console.log(arrivalAirport);
+       console.log(value);
+      fetch("/secureFlights?a1=" + departingAirport + "&a2=" + arrivalAirport + "&a3=" + value)
+      .then(response => response.json())
+      .then(data => {
+          console.log("success!");
+      })
+   }
 
     return (
         <div>
@@ -44,9 +39,9 @@ function FlightPlanner(){
         <div id='formEntry'>
          <p>Destination</p>
          <input type='text'/>
-         <select>
+         <select id='option2'>
          <>
-    {currentData.map(function(details) {
+    {myData.map(function(details) {
       return (
         <option key={details.airport_id}>
              {details.country_name}
@@ -59,11 +54,9 @@ function FlightPlanner(){
 
         <p>Departing:</p>
         <input type='text'/>
-
-
-<select>
+<select id='option1'>
          <>
-    {currentData.map(function(details) {
+    {myData.map(function(details) {
       return (
         <option key={details.airport_id}>
              {details.country_name}
@@ -74,11 +67,11 @@ function FlightPlanner(){
     </>
 </select>
         <p>Start Date</p>
-        <Calendar className='startDate'/>
-
+        <Calendar onChange={onChange} value={value} className='startDate'/>
         <p>End Date</p>
         <Calendar className='endDate'/>
         </div>
+        <button onClick={sendData}>Send</button>
 
         </div>
     )
