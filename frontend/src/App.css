@@ -32,3 +32,18 @@
 .navlink{
     color:white;
 }
+
+#formEntry{
+    position:absolute;
+    left:10%;
+}
+
+.startDate{
+   width:20%;
+}
+
+.endDate{
+    width:20%;
+    margin-top:2%;
+}
+

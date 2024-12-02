@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import { initializeApp } from "firebase/app";
 import { Routes, Route } from 'react-router-dom';
 import Profile from "./pages/Profile.js";
-import BookingPlanner from "./pages/BookingPlanner.js";
+import BookingPlanner from "./pages/Bookings.js";
 import FlightPlanner from "./pages/FlightPlanner.js";
 
 function App() {
@@ -21,16 +21,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
     const [name, setName] = useState("");
-    useEffect(() => {
-    fetch("/getDetails")
-   .then(response => response.json())
-   .then(data => {
-        setName(data["name"]);
-    })
-    .catch(err => {
-        console.log("error:" + err);
-    })
-    }, [])
+//    useEffect(() => {
+//    fetch("/getDetails")
+//   .then(response => response.json())
+//   .then(data => {
+//        setName(data["name"]);
+//    })
+//    .catch(err => {
+//        console.log("error:" + err);
+//    })
+//    }, [])
 
   return (
         <Routes>
