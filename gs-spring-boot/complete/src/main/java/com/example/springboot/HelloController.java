@@ -3,6 +3,7 @@ package com.example.springboot;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,15 +19,8 @@ import java.util.*;
 
 @RestController
 public class HelloController {
-private Firestore db;
 
-public void setDb(Firestore db){
-    this.db = db;
-}
-
-public Firestore getDb(){
-    return this.db;
-}
+public TestService ts;
 
 @GetMapping("/secureFlights")
 @ResponseBody
@@ -38,45 +32,22 @@ public Firestore getDb(){
         System.out.println(Arrays.asList(map));
     }
 
-//     @GetMapping("/getDetails")
-//     @ResponseBody
-//     public Map<String, String> returnDetails(){
-//         HashMap<String, String> map = new HashMap<>();
-//         map.put("name", "His name is " + "John");
-//         return map;
-//
-
-    @GetMapping("/testDB")
-    @ResponseBody
-    public void returnDetails(){
+    @PostMapping("/testDB")
+    public String returnDetails(){
     try{
 	 FileInputStream serviceAccount = new FileInputStream("/Users/johnmcguckin/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
-
    FirebaseOptions options = new FirebaseOptions.Builder()
   .setCredentials(GoogleCredentials.fromStream(serviceAccount))
   .build();
-    FirebaseApp.initializeApp(options);
-//     Firestore db = FirestoreClient.getFirestore();
-//     setDb(db);
-
+       FirebaseApp.initializeApp(options);
+       ts = new TestService();
+       return ts.testDB();
 	 }
 	 catch(Exception e){
 	 System.out.println(e);
 	 }
-        try{
-             HashMap<String, String> map = new HashMap<>();
-        map.put("name", "His name is " + "John");
-        if(getDb() != null){
-         Firestore db = getDb();
-         DocumentReference dr = db.collection("cities").document("LA");
-         ApiFuture<WriteResult> future = dr.set(map);
-         System.out.println("Update time : " + future.get().getUpdateTime());
-        }
-        }
-        catch(Exception e){
-        System.out.println(e);
-        }
 
+	 return "";
 
     }
 
