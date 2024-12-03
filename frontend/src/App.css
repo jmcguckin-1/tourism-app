@@ -64,10 +64,31 @@ select, option{
 .endDate{
     width:10%;
     position:absolute;
-    right:20%;
-    top:36%;
+    right:32%;
+    top:40.5%;
+}
+
+#edText{
+    position:absolute;
+    left:37.5%;
+    top:29%;
+    font-size:20px;
+}
+
+#sdText{
+ font-size:20px;
 }
 
 #bg{
     width:100%;
+}
+
+#sendData{
+    position:absolute;
+    right:10%;
+    top:50%;
+    color:white;
+    border:none;
+    background-color:teal;
+    font-size:20px;
 }

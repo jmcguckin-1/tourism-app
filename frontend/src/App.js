@@ -21,16 +21,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
     const [name, setName] = useState("");
-//    useEffect(() => {
-//    fetch("/getDetails")
-//   .then(response => response.json())
-//   .then(data => {
-//        setName(data["name"]);
-//    })
-//    .catch(err => {
-//        console.log("error:" + err);
-//    })
-//    }, [])
 
   return (
         <Routes>

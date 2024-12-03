@@ -11,24 +11,44 @@ function FlightPlanner(){
     const [numAdults, setNumAdults] = useState("");
     const [numChildren, setNumChildren] = useState("");
     const [value, onChange] = useState("");
-    const [values, setValues] = useState([]);
+    const [destOptions, setValues] = useState([]);
+    const [departOptions, setDepValues] = useState([]);
 
    function sendData(){
-      fetch("/secureFlights?a1=" + departingAirport + "&a2=" + arrivalAirport + "&a3=" + value)
+      console.log(departingAirport);
+      console.log(arrivalAirport);
+      console.log(value);
+      fetch("/secureFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value)
       .then(response => response.json())
       .then(data => {
           console.log("success!");
       })
    }
 
-   function setChoices(x){
+   function setA(){
+    var e = document.getElementById("option2");
+    var textVal = e.options[e.selectedIndex].text;
+    setArrival(textVal);
+   }
+   function setD(){
+     var e = document.getElementById("option1");
+    var textVal = e.options[e.selectedIndex].text;
+    setDA(textVal);
+   }
+
+   function setChoices(x, y){
         let newValues = [];
        for (let i=0; i<myData.length; i++){
             if(myData[i]['country_name'].includes(x)){
                 newValues.push(myData[i]);
             }
        }
-       setValues(newValues);
+       if (y === "dest"){
+         setValues(newValues);
+       }
+       else{
+            setDepValues(newValues);
+       }
    }
 
     return (
@@ -37,10 +57,10 @@ function FlightPlanner(){
         <NavBar/>
         <div id='formEntry'>
          <p>Destination</p>
-         <input type='text'/>
-         <select id='option2'>
+         <input type='text'onChange={e => setChoices(e.target.value, "dest")}/>
+         <select id='option2' onChange={setA}>
          <>
-    {myData.map(function(details) {
+    {destOptions.map(function(details) {
       return (
         <option key={details.airport_id}>
              {details.country_name}
@@ -52,10 +72,10 @@ function FlightPlanner(){
 </select>
 
         <p>Departing:</p>
-        <input type='text' id='departing' onChange={e => setChoices(e.target.value)}/>
-<select id='option1'>
+        <input type='text' id='departing' onChange={e => setChoices(e.target.value, "depart")}/>
+<select id='option1' onChange={setD}>
          <>
-    {values.map(function(details) {
+    {departOptions.map(function(details) {
       return (
         <option key={details.airport_id}>
              {details.country_name}
@@ -65,14 +85,14 @@ function FlightPlanner(){
     })}
     </>
 </select>
-        <p>Start Date</p>
+        <p id='sdText'>Start Date</p>
         <Calendar onChange={onChange} value={value} className='startDate'/>
-        <p>End Date</p>
+        <p id='edText'>End Date</p>
         <Calendar className='endDate'/>
+        <button onClick={sendData} id='sendData'>Send</button>
         </div>
-        <button onClick={sendData}>Send</button>
 
-        // radio buttons (direct flight, one way etc.)
+        {/*radio buttons (direct flight, one way etc.)*/}
         </div>
     )
 }
