@@ -11,6 +11,7 @@ function FlightPlanner(){
     const [numAdults, setNumAdults] = useState("");
     const [numChildren, setNumChildren] = useState("");
     const [value, onChange] = useState("");
+    const [endDate, setED] = useState("");
     const [destOptions, setValues] = useState([]);
     const [departOptions, setDepValues] = useState([]);
 
@@ -18,10 +19,10 @@ function FlightPlanner(){
       console.log(departingAirport);
       console.log(arrivalAirport);
       console.log(value);
-      fetch("/secureFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value)
+      fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value + "&endDate=" + endDate)
       .then(response => response.json())
       .then(data => {
-          console.log("success!");
+          console.log(data);
       })
    }
 
@@ -88,7 +89,7 @@ function FlightPlanner(){
         <p id='sdText'>Start Date</p>
         <Calendar onChange={onChange} value={value} className='startDate'/>
         <p id='edText'>End Date</p>
-        <Calendar className='endDate'/>
+        <Calendar onChange={setED} value={endDate}  className='endDate'/>
         <button onClick={sendData} id='sendData'>Send</button>
         </div>
 
