@@ -67,6 +67,12 @@
   <artifactId>gax</artifactId>
   <version>2.55.0</version>
 </dependency>
+
+		<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.11.0</version>
+</dependency>
 		<!-- end::tests[] -->
 	</dependencies>
 

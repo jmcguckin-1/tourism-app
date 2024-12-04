@@ -16,6 +16,8 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import java.io.FileInputStream;
 import java.util.List;
+import java.util.Arrays;
+import com.google.gson.Gson;
 
 @Service
 public class TestService{
@@ -44,8 +46,7 @@ public class TestService{
          return future.get().getUpdateTime().toString();
     }
 
-    public Map<String, Object> getFlights(String start, String end, String startDate){
-       System.out.println("hello");
+    public String getFlights(String start, String end, String startDate){
        try{
              Firestore db = FirestoreClient.getFirestore();
        ApiFuture<QuerySnapshot> future = db.collection("flights").get();
@@ -53,9 +54,10 @@ public class TestService{
        if (documents.size() != 0){
         for (DocumentSnapshot ds: documents){
             if (ds.getString("start").equals(start) && ds.getString("end").equals(end)) {
-                 Map<String, Object> flightData = ds.getData();
-                 Map<String, Object> finalData = new HashMap<String,Object>(flightData);
-                 return finalData;
+                 Map<String, Object> finalData = ds.getData();
+                 Gson gson = new Gson();
+                 String json = gson.toJson(finalData);
+                 return json;
             }
        }
        }
