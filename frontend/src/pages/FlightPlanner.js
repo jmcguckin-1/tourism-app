@@ -70,12 +70,11 @@ function FlightPlanner(){
         <div key={flight.id}>
            <p>{flight.ft1} - {flight.ft2}</p>
            <p>{flight.airline}</p>
-           <p>Leaving: {flight.start}</p>
-           <p>Destination: {flight.end}</p>
+           <p>{flight.start} to {flight.end}</p>
            <p>Return Flight</p>
            <p>{flight.rt1} - {flight.rt2}</p>
-           <p>Leaving: {flight.end}</p>
-           <p>Destination: {flight.start}</p>
+            <p>{flight.end} to {flight.start}</p>
+            <p>£{flight.price}</p>
         </div>
       )
     })}

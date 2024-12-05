@@ -48,6 +48,16 @@
     z-index:2;
 }
 
+ #flightTimes{
+    background-color:white;
+    color:black;
+    font-size:16px;
+    padding:1%;
+    top:10%;
+    max-height:400px;
+    overflow:scroll;
+ }
+
 select, option{
  font-family: "Afacad Flux", sans-serif;
      font-size:15px;

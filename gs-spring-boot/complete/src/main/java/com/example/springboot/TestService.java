@@ -58,7 +58,7 @@ public class TestService{
         for (DocumentSnapshot ds: documents){
             if (ds.getString("start").equals(start) && ds.getString("end").equals(end)) {
                  ArrayList<Timestamp> al = (ArrayList<Timestamp>) ds.get("first_flight");
-                 ArrayList<Timestamp> al1 = (ArrayList<Timestamp>) ds.get("second_flight");
+                 ArrayList<Timestamp> al1 = (ArrayList<Timestamp>) ds.get("return_flight");
                  String flightTimeZero = al.get(0).toDate().toString();
                  String flightTimeOne = al.get(1).toDate().toString();
                  String secondOne = al1.get(0).toDate().toString();
@@ -73,14 +73,13 @@ public class TestService{
 
                  li.add(flightData);
             }
-       return gson.toJson(li);
        }
 
        } catch(Exception e){
         System.out.println(e);
        }
 
-       return null;
+       return gson.toJson(li);
     }
 
 }
