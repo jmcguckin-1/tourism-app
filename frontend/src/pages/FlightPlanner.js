@@ -14,7 +14,7 @@ function FlightPlanner(){
     const [endDate, setED] = useState("");
     const [destOptions, setValues] = useState([]);
     const [departOptions, setDepValues] = useState([]);
-
+    const [flightData, setFD] = useState([]);
    function sendData(){
       console.log(departingAirport);
       console.log(arrivalAirport);
@@ -22,7 +22,9 @@ function FlightPlanner(){
       fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value + "&endDate=" + endDate)
       .then(response => response.json())
       .then(data => {
-          console.log(data);
+         setFD(data);
+
+         document.getElementById('formEntry').style.display='none';
       })
    }
 
@@ -35,6 +37,11 @@ function FlightPlanner(){
      var e = document.getElementById("option1");
     var textVal = e.options[e.selectedIndex].text;
     setDA(textVal);
+   }
+
+   function convertToDate(y){
+    var d = new Date(y);
+    return d;
    }
 
    function setChoices(x, y){
@@ -56,6 +63,28 @@ function FlightPlanner(){
         <div>
         <img src={background} id='bg'/>
         <NavBar/>
+        <div id='flightTimes'>
+     <>
+    {flightData.map(function(flight) {
+      return (
+        <div key={flight.id}>
+           <p>{flight.ft1} - {flight.ft2}</p>
+           <p>{flight.airline}</p>
+           <p>Leaving: {flight.start}</p>
+           <p>Destination: {flight.end}</p>
+           <p>Return Flight</p>
+           <p>{flight.rt1} - {flight.rt2}</p>
+           <p>Leaving: {flight.end}</p>
+           <p>Destination: {flight.start}</p>
+        </div>
+      )
+    })}
+    </>
+
+
+
+
+        </div>
         <div id='formEntry'>
          <p>Destination</p>
          <input type='text'onChange={e => setChoices(e.target.value, "dest")}/>

@@ -10,14 +10,15 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import org.springframework.stereotype.Service;
 import java.util.Map;
+import java.util.List;
 import java.util.HashMap;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import java.io.FileInputStream;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import com.google.gson.Gson;
 
 @Service
@@ -54,13 +55,24 @@ public class TestService{
              Firestore db = FirestoreClient.getFirestore();
        ApiFuture<QuerySnapshot> future = db.collection("flights").get();
        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-       if (documents.size() != 0){
         for (DocumentSnapshot ds: documents){
             if (ds.getString("start").equals(start) && ds.getString("end").equals(end)) {
+                 ArrayList<Timestamp> al = (ArrayList<Timestamp>) ds.get("first_flight");
+                 ArrayList<Timestamp> al1 = (ArrayList<Timestamp>) ds.get("second_flight");
+                 String flightTimeZero = al.get(0).toDate().toString();
+                 String flightTimeOne = al.get(1).toDate().toString();
+                 String secondOne = al1.get(0).toDate().toString();
+                 String secondTwo = al1.get(1).toDate().toString();
+
                  Map<String, Object> flightData = ds.getData();
+                 flightData.put("id", ds.getId());
+                 flightData.put("ft1", flightTimeZero);
+                 flightData.put("ft2", flightTimeOne);
+                 flightData.put("rt1", secondOne);
+                 flightData.put("rt2", secondTwo);
+
                  li.add(flightData);
             }
-       }
        return gson.toJson(li);
        }
 

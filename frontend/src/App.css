@@ -33,7 +33,7 @@
     color:white;
 }
 
-#formEntry{
+#formEntry, #flightTimes{
     position:absolute;
     left:10%;
     top:0%;
@@ -45,6 +45,7 @@
   font-style: normal;
   font-variation-settings:
     "slnt" 0;
+    z-index:2;
 }
 
 select, option{
