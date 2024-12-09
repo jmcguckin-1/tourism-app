@@ -48,7 +48,7 @@
     z-index:2;
 }
 
- #flightTimes{
+#flightTimes{
     background-color:white;
     color:black;
     font-size:16px;
@@ -56,7 +56,8 @@
     top:10%;
     max-height:400px;
     overflow:scroll;
- }
+    display:none;
+}
 
 select, option{
  font-family: "Afacad Flux", sans-serif;
@@ -69,20 +70,21 @@ select, option{
 }
 
 .startDate{
-   width:10%;
+  position:absolute;
+    top:78%;
 }
 
 .endDate{
-    width:10%;
+    width:8%;
     position:absolute;
     right:32%;
-    top:40.5%;
+    top:78%;
 }
 
 #edText{
     position:absolute;
     left:37.5%;
-    top:29%;
+    top:56%;
     font-size:20px;
 }
 
@@ -96,10 +98,40 @@ select, option{
 
 #sendData{
     position:absolute;
-    right:10%;
-    top:50%;
+    right:7%;
+    top:63%;
+    width:20%;
     color:white;
-    border:none;
-    background-color:teal;
-    font-size:20px;
+    font-size:40px;
+    border:2px solid white;
+    background-color:lightblue;
+}
+
+#sendData:hover{
+    cursor:pointer;
+}
+
+#loadingScreen, .spin{
+   color:white;
+}
+
+.spin{
+    font-size:40px;
+}
+#loadingScreen{
+    position:absolute;
+    top:30%;
+    left:35%;
+    font-size:40px;
+    display:none;
+}
+#addOptions{
+    position:absolute;
+    right:2%;
+    top:30%;
+    padding:1%;
+    width:30%;
+    color:white;
+    font-size:30px;
+    background-color:lightblue;
 }

@@ -22,8 +22,10 @@ public TestService ts = new TestService();
 
 @GetMapping("/findFlights")
 @ResponseBody
-    public String findFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate, @RequestParam String endDate) throws Exception{
-       return ts.getFlights(departureAirport, arrivalAirport, startDate);
+    public String findFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate, @RequestParam String endDate, @RequestParam boolean direct,
+    @RequestParam boolean oneWay, @RequestParam boolean returnFlight) throws Exception{
+       return ts.getFlights(departureAirport, arrivalAirport, startDate, endDate,
+       direct, oneWay, returnFlight);
     }
 
     @PostMapping("/testDB")

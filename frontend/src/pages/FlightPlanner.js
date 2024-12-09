@@ -4,6 +4,8 @@ import {useState, useEffect} from 'react';
 import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../background.jpg";
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
@@ -15,16 +17,24 @@ function FlightPlanner(){
     const [destOptions, setValues] = useState([]);
     const [departOptions, setDepValues] = useState([]);
     const [flightData, setFD] = useState([]);
+    const [direct, setDirect] = useState(false);
+    const [oneWay, setOneWay] = useState(false);
+    const [returnFlight, setReturn] = useState(false);
+
    function sendData(){
-      console.log(departingAirport);
-      console.log(arrivalAirport);
-      console.log(value);
-      fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value + "&endDate=" + endDate)
+      fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value + "&endDate=" + endDate
+      + "&direct=" + direct + "&oneWay=" + oneWay + "&returnFlight=" + returnFlight)
       .then(response => response.json())
       .then(data => {
-         setFD(data);
-
          document.getElementById('formEntry').style.display='none';
+         document.getElementById('loadingScreen').style.display='block';
+         setTimeout(() => {
+          document.getElementById('loadingScreen').style.display='block';
+          document.getElementById('addOptions').style.display='none';
+          setFD(data);
+          document.getElementById('flightTimes').style.display='block';
+         }, 5000);
+
       })
    }
 
@@ -37,11 +47,6 @@ function FlightPlanner(){
      var e = document.getElementById("option1");
     var textVal = e.options[e.selectedIndex].text;
     setDA(textVal);
-   }
-
-   function convertToDate(y){
-    var d = new Date(y);
-    return d;
    }
 
    function setChoices(x, y){
@@ -63,6 +68,12 @@ function FlightPlanner(){
         <div>
         <img src={background} id='bg'/>
         <NavBar/>
+        <div id="loadingScreen">
+            <p>Loading your flights...</p>
+            <Spin indicator={<LoadingOutlined style={{
+            fontSize: 48,
+          }} spin />} className='spin' size="large" />
+        </div>
         <div id='flightTimes'>
      <>
     {flightData.map(function(flight) {
@@ -71,18 +82,16 @@ function FlightPlanner(){
            <p>{flight.ft1} - {flight.ft2}</p>
            <p>{flight.airline}</p>
            <p>{flight.start} to {flight.end}</p>
+           <br/>
            <p>Return Flight</p>
            <p>{flight.rt1} - {flight.rt2}</p>
             <p>{flight.end} to {flight.start}</p>
             <p>£{flight.price}</p>
+             <br/>
         </div>
       )
     })}
     </>
-
-
-
-
         </div>
         <div id='formEntry'>
          <p>Destination</p>
@@ -114,14 +123,22 @@ function FlightPlanner(){
     })}
     </>
 </select>
+
         <p id='sdText'>Start Date</p>
         <Calendar onChange={onChange} value={value} className='startDate'/>
         <p id='edText'>End Date</p>
         <Calendar onChange={setED} value={endDate}  className='endDate'/>
-        <button onClick={sendData} id='sendData'>Send</button>
         </div>
+        <button onClick={sendData} id='sendData'>Send</button>
 
-        {/*radio buttons (direct flight, one way etc.)*/}
+        <div id='addOptions'>
+         <br/>
+        <label>Direct Flight: </label> <input type='checkbox' onChange={e => setDirect(e.target.checked)} name='flightType'/>
+        <br/>
+        <label>One Way: </label> <input type='checkbox' onChange={e => setOneWay(e.target.checked)} name='flightType'/>
+        <br/>
+        <label>Return: </label> <input type='checkbox' onChange={e => setReturn(e.target.checked)}name='flightType'/>
+        </div>
         </div>
     )
 }
