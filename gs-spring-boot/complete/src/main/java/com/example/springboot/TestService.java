@@ -48,6 +48,23 @@ public class TestService{
          return future.get().getUpdateTime().toString();
     }
 
+    // used to verify dates match up
+    public static boolean checkDates(String a, String b){
+     String[] tokens = a.split(" ");
+     String firebaseDate = "";
+     int count = 0;
+     while(count != 2){
+        firebaseDate += tokens[count] + " ";
+        count++;
+     }
+     firebaseDate += tokens[count];
+     if (b.contains(firebaseDate)){
+          return true;
+     }
+     return false;
+
+    }
+
     public String getFlights(String start, String end, String startDate, String endDate, boolean direct,
     boolean oneWay, boolean returnFlight){
        ArrayList<Map<String,Object>> li = new ArrayList<>();
@@ -58,39 +75,27 @@ public class TestService{
        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (DocumentSnapshot ds: documents){
             if (ds.getString("start").equals(start) && ds.getString("end").equals(end)) {
-                 // need to filter dates, more important
                  ArrayList<Timestamp> al = (ArrayList<Timestamp>) ds.get("first_flight");
                  ArrayList<Timestamp> al1 = (ArrayList<Timestamp>) ds.get("return_flight");
                  String flightTimeZero = al.get(0).toDate().toString();
-                 System.out.println(startDate);
-                 System.out.println();
-                 System.out.println(flightTimeZero);
                  String flightTimeOne = al.get(1).toDate().toString();
                  String secondOne = al1.get(0).toDate().toString();
                  String secondTwo = al1.get(1).toDate().toString();
-
-                 if (ds.getBoolean("direct") == direct){
-                        // todo filtering for type of flight.
+                 if (checkDates(flightTimeZero, startDate) && checkDates(secondOne, endDate)){
+                    Map<String, Object> flightData = ds.getData();
+                    flightData.put("id", ds.getId());
+                    flightData.put("ft1", flightTimeZero);
+                    flightData.put("ft2", flightTimeOne);
+                    flightData.put("rt1", secondOne);
+                    flightData.put("rt2", secondTwo);
+                    li.add(flightData);
                  }
-
-                 // do two substrings
-                 // check if one contains the other
-
-                 Map<String, Object> flightData = ds.getData();
-                 flightData.put("id", ds.getId());
-                 flightData.put("ft1", flightTimeZero);
-                 flightData.put("ft2", flightTimeOne);
-                 flightData.put("rt1", secondOne);
-                 flightData.put("rt2", secondTwo);
-
-                 li.add(flightData);
             }
        }
 
        } catch(Exception e){
         System.out.println(e);
        }
-
        return gson.toJson(li);
     }
 

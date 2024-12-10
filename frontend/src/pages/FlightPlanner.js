@@ -22,17 +22,28 @@ function FlightPlanner(){
     const [returnFlight, setReturn] = useState(false);
 
    function sendData(){
+   document.getElementById('formEntry').style.display='none';
+    document.getElementById('addOptions').style.display='none';
+    document.getElementById('loadingScreen').style.display='block';
+    document.getElementById('sendData').style.display='none';
       fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value + "&endDate=" + endDate
       + "&direct=" + direct + "&oneWay=" + oneWay + "&returnFlight=" + returnFlight)
       .then(response => response.json())
       .then(data => {
-         document.getElementById('formEntry').style.display='none';
-         document.getElementById('loadingScreen').style.display='block';
          setTimeout(() => {
-          document.getElementById('loadingScreen').style.display='block';
-          document.getElementById('addOptions').style.display='none';
-          setFD(data);
+
+          if (data.length !== 0){
+           setFD(data);
           document.getElementById('flightTimes').style.display='block';
+          document.getElementById('loadingScreen').style.display='none';
+          }
+          else{
+            document.getElementById('loadingScreen').style.display='none';
+            document.getElementById('formEntry').style.display='block';
+            document.getElementById('sendData').style.display='block';
+            alert("no flight times were found! try editing your inputs");
+          }
+
          }, 5000);
 
       })
