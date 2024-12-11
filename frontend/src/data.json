@@ -11,5 +11,11 @@
     "airport_name": "Dublin International",
     "city_iata_code": "DUB",
     "country_name": "Dublin, Ireland"
+  },
+  {
+    "airport_id": "3",
+    "airport_name": "Paris Charles de Gaulle Airport",
+    "city_iata_code": "CDG",
+    "country_name": "Paris, France"
   }
 ]

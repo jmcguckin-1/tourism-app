@@ -39,13 +39,12 @@ public class TestService{
     }
 
     }
-    public String testDB() throws Exception{
-         Firestore db = FirestoreClient.getFirestore();
-         HashMap<String, String> map = new HashMap<>();
-         map.put("name", "His name is " + "John");
-         DocumentReference dr = db.collection("cities").document("LA");
-         ApiFuture<WriteResult> future = dr.set(map);
-         return future.get().getUpdateTime().toString();
+
+    public String getHotels(String destination, String startDate, String endDate, String[] requests){
+        for (String e: requests){
+            System.out.println(e);
+        }
+        return "hotels";
     }
 
     // used to verify dates match up

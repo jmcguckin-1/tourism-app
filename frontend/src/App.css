@@ -81,6 +81,18 @@ select, option{
     top:78%;
 }
 
+.startDate1{
+  position:absolute;
+    top:92%;
+}
+
+.endDate1{
+    width:8%;
+    position:absolute;
+    right:32%;
+    top:92%;
+}
+
 #edText{
     position:absolute;
     left:37.5%;

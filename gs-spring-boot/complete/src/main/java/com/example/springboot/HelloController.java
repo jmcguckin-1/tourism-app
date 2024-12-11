@@ -28,17 +28,11 @@ public TestService ts = new TestService();
        direct, oneWay, returnFlight);
     }
 
-    @PostMapping("/testDB")
-    public String returnDetails(){
-    try{
-       return ts.testDB();
-	 }
-	 catch(Exception e){
-	 System.out.println(e);
-	 }
-
-	 return "";
-
-    }
+@GetMapping("/findHotels")
+@ResponseBody
+public String findHotels(@RequestParam String destination, @RequestParam String startDate,
+@RequestParam String endDate, @RequestParam String[] requests){
+return ts.getHotels(destination, startDate, endDate, requests);
+}
 
 }
