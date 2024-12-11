@@ -19,6 +19,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Arrays;
 import com.google.gson.Gson;
 
 @Service
@@ -40,11 +41,33 @@ public class TestService{
 
     }
 
-    public String getHotels(String destination, String startDate, String endDate, String[] requests){
-        for (String e: requests){
-            System.out.println(e);
-        }
-        return "hotels";
+    public String getHotels(String destination, String startDate, String endDate){
+        ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("hotels").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (ds.getString("location").equals(destination)) {
+                Timestamp t = (Timestamp) ds.get("start_date");
+                Timestamp t1 = (Timestamp) ds.get("end_date");
+                String flightTimeZero = t.toDate().toString();
+                String flightTimeOne = t1.toDate().toString();
+                 if (checkDates(flightTimeZero, startDate) && checkDates(flightTimeOne, endDate)){
+                    Map<String, Object> hotelData = ds.getData();
+                    System.out.println(Arrays.asList(hotelData));
+                    hotelData.put("id", ds.getId());
+                    hotelData.put("day1", flightTimeZero);
+                    hotelData.put("final_day", flightTimeOne);
+                 }
+            }
+       }
+
+       } catch(Exception e){
+        System.out.println(e);
+       }
+        return gson.toJson(li);
     }
 
     // used to verify dates match up

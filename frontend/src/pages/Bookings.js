@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../hotels.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 
 function BookingPlanner(){
     const [hotel, setHotel] = useState("");
@@ -16,16 +16,32 @@ function BookingPlanner(){
     const [endDate, setEndDate] = useState();
     const [destinationValues, setDValues] = useState([]);
     const [requests, setRequests] = useState([]);
+    const [singleBeds, setSB] = useState(false);
+    const [wifi, setWifi] = useState(false);
+    const [pool, setPool] = useState(false);
+
+    const onClose = (e) => {
+  console.log(e, 'I was closed.');
+};
 
    function sendData(){
-   let requests = ["single bed", "2 rooms", "wi-fi", "pool"];
+   let requests = [{
+        "singleBeds": singleBeds,
+        "wifi": wifi,
+        "pool": pool
+   }];
    setRequests(requests);
-   fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate
-    + "&requests=" + requests)
+   if (destination === ""){
+    document.getElementsByClassName('dateError')[0].style.display='block';
+   }
+   else{
+     fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate)
     .then(response => response.json())
     .then(data => {
         console.log("success!");
     })
+   }
+
 
    }
 
@@ -65,7 +81,6 @@ function BookingPlanner(){
       return (
         <option key={details.airport_id}>
              {details.country_name}
-             ({details.city_iata_code}) - {details.airport_name}
         </option>
       )
     })}
@@ -76,10 +91,25 @@ function BookingPlanner(){
         <Calendar onChange={setStartDate} value={startDate} className='startDate1'/>
         <p id='edText'>End Date</p>
         <Calendar onChange={setEndDate} value={endDate}  className='endDate1'/>
+        <Alert
+      message="Field Not Entered"
+      description="Please enter a destination for your stay"
+      type="error"
+      className='dateError'
+      closable
+      onClose={onClose}
+    />
+        </div>
+          <div id='preferences'>
+         <br/>
+        <label>Single Beds: </label> <input type='checkbox' onChange={e => setSB(e.target.checked)}/>
+        <br/>
+        <label>Wi-Fi: </label> <input type='checkbox' onChange={e => setWifi(e.target.checked)}/>
+        <br/>
+        <label>Pool: </label> <input type='checkbox' onChange={e => setPool(e.target.checked)}/>
         </div>
         <button onClick={sendData} id='sendData'>Send</button>
         </div>
-
     )
 }
 

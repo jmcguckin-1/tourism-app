@@ -14,6 +14,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import java.io.FileInputStream;
+import java.util.Map;
 
 @RestController
 public class HelloController {
@@ -31,8 +32,8 @@ public TestService ts = new TestService();
 @GetMapping("/findHotels")
 @ResponseBody
 public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-@RequestParam String endDate, @RequestParam String[] requests){
-return ts.getHotels(destination, startDate, endDate, requests);
+@RequestParam String endDate){
+return ts.getHotels(destination, startDate, endDate);
 }
 
 }
