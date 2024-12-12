@@ -5,10 +5,9 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../hotels.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin, Alert } from 'antd';
+import { Spin, Alert, Rate } from 'antd';
 
 function BookingPlanner(){
-    const [hotel, setHotel] = useState("");
     const [destination, setDestination] = useState("");
     const [numChildren, setNumChildren] = useState("");
     const [numAdults, setAdults] = useState("");
@@ -19,6 +18,7 @@ function BookingPlanner(){
     const [singleBeds, setSB] = useState(false);
     const [wifi, setWifi] = useState(false);
     const [pool, setPool] = useState(false);
+    const [hotelData, setHD] = useState([]);
 
     const onClose = (e) => {
   console.log(e, 'I was closed.');
@@ -31,20 +31,34 @@ function BookingPlanner(){
         "pool": pool
    }];
    setRequests(requests);
+
    if (destination === ""){
     document.getElementsByClassName('dateError')[0].style.display='block';
    }
    else{
+    document.getElementById('loadingScreenHotels').style.display='block';
+    document.getElementById('formEntry').style.display='none';
      fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate)
     .then(response => response.json())
     .then(data => {
-        console.log("success!");
+         setTimeout(() => {
+          if (data){
+              document.getElementById('loadingScreenHotels').style.display='none';
+           setHD(data);
+          document.getElementById('hotels').style.display='block';
+
+          }
+          else{
+            document.getElementById('loadingScreenHotels').style.display='none';
+            document.getElementById('formEntry').style.display='block';
+            document.getElementById('sendData').style.display='block';
+            alert("no hotels were found for your request! try editing your inputs");
+          }
+         }, 5000);
     })
    }
 
-
    }
-
 
    function setDest(){
     var e = document.getElementById("option2");
@@ -66,6 +80,21 @@ function BookingPlanner(){
         <div>
         <img src={background} id='bg'/>
         <NavBar/>
+          <div id='hotels'>
+     <>
+    {hotelData.map(function(hotel) {
+      return (
+        <div key={hotel.id}>
+           <p>{hotel.location}</p>
+           <p>{hotel.accomodation_name}</p>
+            <Rate disabled value={hotel.star_rating} />
+            <p>{hotel.start_date} - {hotel.start_date}</p>
+           <br/>
+        </div>
+      )
+    })}
+    </>
+    </div>
         <div id="loadingScreenHotels">
             <p>Loading your hotels...</p>
             <Spin indicator={<LoadingOutlined style={{
@@ -73,7 +102,7 @@ function BookingPlanner(){
           }} spin />} className='spin' size="large" />
         </div>
         <div id='formEntry'>
-         <p>Destination</p>
+          <p>Destination</p>
          <input type='text'onChange={e => setChoices(e.target.value)}/>
          <select id='option2' onChange={setDest}>
          <>
@@ -100,6 +129,7 @@ function BookingPlanner(){
       onClose={onClose}
     />
         </div>
+
           <div id='preferences'>
          <br/>
         <label>Single Beds: </label> <input type='checkbox' onChange={e => setSB(e.target.checked)}/>

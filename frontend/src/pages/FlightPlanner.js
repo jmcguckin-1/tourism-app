@@ -31,7 +31,6 @@ function FlightPlanner(){
       .then(response => response.json())
       .then(data => {
          setTimeout(() => {
-
           if (data.length !== 0){
            setFD(data);
           document.getElementById('flightTimes').style.display='block';

@@ -48,11 +48,12 @@
     z-index:2;
 }
 
-#flightTimes{
+#flightTimes, #hotels{
     background-color:white;
     color:black;
     font-size:16px;
     padding:1%;
+    position:absolute;
     top:10%;
     max-height:400px;
     overflow:scroll;
@@ -130,7 +131,7 @@ select, option{
 .spin{
     font-size:40px;
 }
-#loadingScreen{
+#loadingScreen, #loadingScreenHotels{
     position:absolute;
     top:30%;
     left:35%;

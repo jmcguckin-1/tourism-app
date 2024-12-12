@@ -56,10 +56,10 @@ public class TestService{
                 String flightTimeOne = t1.toDate().toString();
                  if (checkDates(flightTimeZero, startDate) && checkDates(flightTimeOne, endDate)){
                     Map<String, Object> hotelData = ds.getData();
-                    System.out.println(Arrays.asList(hotelData));
                     hotelData.put("id", ds.getId());
                     hotelData.put("day1", flightTimeZero);
                     hotelData.put("final_day", flightTimeOne);
+                    li.add(hotelData);
                  }
             }
        }
