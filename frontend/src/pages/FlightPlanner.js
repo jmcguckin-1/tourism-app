@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../background.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin, Alert } from 'antd';
+import { Spin, Alert, InputNumber } from 'antd';
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
@@ -188,6 +188,9 @@ function FlightPlanner(){
         <button onClick={sendData} id='sendData'>Send</button>
 
         <div id='addOptions'>
+        <label>Num Adults:</label> <InputNumber min={1} max={10} defaultValue={3} onChange={setNumAdults}/>
+        <br/>
+        <label>Num Children:</label> <InputNumber min={1} max={10} defaultValue={3} onChange={setNumChildren}/>
          <br/>
         <label>Direct Flight: </label> <input type='checkbox' onChange={e => setDirect(e.target.checked)} name='flightType'/>
         <br/>

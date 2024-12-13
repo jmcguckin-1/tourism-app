@@ -41,7 +41,8 @@ public class TestService{
 
     }
 
-    public String getHotels(String destination, String startDate, String endDate){
+    public String getHotels(String destination, String startDate, String endDate, int numAdults,
+    int numChildren){
         ArrayList<Map<String,Object>> li = new ArrayList<>();
         Gson gson = new Gson();
         try{
@@ -55,6 +56,9 @@ public class TestService{
                 String flightTimeZero = t.toDate().toString();
                 String flightTimeOne = t1.toDate().toString();
                  if (checkDates(flightTimeZero, startDate) && checkDates(flightTimeOne, endDate)){
+                 // add logic for that
+//                     if (numAdults == ds.getInt("adults")){
+//                     }
                     Map<String, Object> hotelData = ds.getData();
                     hotelData.put("id", ds.getId());
                     hotelData.put("day1", flightTimeZero);

@@ -32,8 +32,8 @@ public TestService ts = new TestService();
 @GetMapping("/findHotels")
 @ResponseBody
 public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-@RequestParam String endDate){
-return ts.getHotels(destination, startDate, endDate);
+@RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren){
+return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
 }
 
 }

@@ -5,12 +5,12 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../hotels.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin, Alert, Rate } from 'antd';
+import { Spin, Alert, Rate, InputNumber } from 'antd';
 
 function BookingPlanner(){
     const [destination, setDestination] = useState("");
     const [numChildren, setNumChildren] = useState("");
-    const [numAdults, setAdults] = useState("");
+    const [numAdults, setAdults] = useState();
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [destinationValues, setDValues] = useState([]);
@@ -50,7 +50,8 @@ function BookingPlanner(){
      document.getElementById('preferences').style.display='none';
     document.getElementById('formEntry').style.display='none';
     document.getElementById('sendData').style.display='none';
-     fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate)
+     fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate
+     + "&numAdults=" + numAdults + "&numChildren=" + numChildren)
     .then(response => response.json())
     .then(data => {
          setTimeout(() => {
@@ -77,6 +78,16 @@ function BookingPlanner(){
     setDestination(textVal);
    }
 
+   function basketAdd(x){
+       let currentHotel = [];
+       for (let i=0; i<hotelData.length; i++){
+           if (hotelData[i]['id'] === x){
+               currentHotel.push(hotelData[i]);
+           }
+       }
+       console.log(currentHotel[0]['accomodation_name']);
+   }
+
  function setChoices(x){
         let newValues = [];
        for (let i=0; i<myData.length; i++){
@@ -100,6 +111,10 @@ function BookingPlanner(){
            <p>{hotel.accomodation_name}</p>
             <Rate disabled value={hotel.star_rating} />
             <p>{hotel.st} - {hotel.end}</p>
+             <p>{hotel.adults} adults, {hotel.children} children</p>
+            <p>£{hotel.price}</p>
+            <button>View Info</button>
+            <button onClick={basketAdd(hotel.id)}>Add to Basket</button>
            <br/>
         </div>
       )
@@ -160,6 +175,9 @@ function BookingPlanner(){
         </div>
 
           <div id='preferences'>
+         <label>Num Adults:</label> <InputNumber min={1} max={10} defaultValue={3} onChange={setAdults}/>
+        <br/>
+        <label>Num Children:</label> <InputNumber min={0} max={10} defaultValue={3} onChange={setNumChildren}/>
          <br/>
         <label>Single Beds: </label> <input type='checkbox' onChange={e => setSB(e.target.checked)}/>
         <br/>

@@ -149,7 +149,8 @@ select, option{
     background-color:lightblue;
 }
 
-.dateError, .hotelError, .fieldError, .dateError2, .fieldErrorF, .dateErrorF{
+.dateError, .hotelError, .fieldError, .dateError2, .fieldErrorF,
+.dateErrorF, .guestError{
     display:none;
     width:30%;
     position:absolute;
