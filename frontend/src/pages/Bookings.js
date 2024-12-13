@@ -19,6 +19,7 @@ function BookingPlanner(){
     const [wifi, setWifi] = useState(false);
     const [pool, setPool] = useState(false);
     const [hotelData, setHD] = useState([]);
+    const [valid, setValid] = useState(false);
 
     const onClose = (e) => {
   console.log(e, 'I was closed.');
@@ -32,17 +33,28 @@ function BookingPlanner(){
    }];
    setRequests(requests);
 
-   if (destination === ""){
-    document.getElementsByClassName('dateError')[0].style.display='block';
-   }
-   else{
-    document.getElementById('loadingScreenHotels').style.display='block';
+    if (endDate < startDate){
+        document.getElementsByClassName('dateError2')[0].style.display='block';
+        setValid(false);
+    }
+    if (destination === ""){
+        document.getElementsByClassName('fieldError')[0].style.display='block';
+        setValid(false);
+    }
+    if (endDate > startDate && destination !== ""){
+        setValid(true);
+    }
+
+    if (valid){
+        document.getElementById('loadingScreenHotels').style.display='block';
+     document.getElementById('preferences').style.display='none';
     document.getElementById('formEntry').style.display='none';
+    document.getElementById('sendData').style.display='none';
      fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate)
     .then(response => response.json())
     .then(data => {
          setTimeout(() => {
-          if (data){
+          if (data.length !==0){
               document.getElementById('loadingScreenHotels').style.display='none';
            setHD(data);
           document.getElementById('hotels').style.display='block';
@@ -52,13 +64,12 @@ function BookingPlanner(){
             document.getElementById('loadingScreenHotels').style.display='none';
             document.getElementById('formEntry').style.display='block';
             document.getElementById('sendData').style.display='block';
-            alert("no hotels were found for your request! try editing your inputs");
+            document.getElementsByClassName('hotelError')[0].style.display='block';
           }
          }, 5000);
     })
-   }
-
-   }
+    }
+}
 
    function setDest(){
     var e = document.getElementById("option2");
@@ -88,7 +99,7 @@ function BookingPlanner(){
            <p>{hotel.location}</p>
            <p>{hotel.accomodation_name}</p>
             <Rate disabled value={hotel.star_rating} />
-            <p>{hotel.start_date} - {hotel.start_date}</p>
+            <p>{hotel.st} - {hotel.end}</p>
            <br/>
         </div>
       )
@@ -124,7 +135,25 @@ function BookingPlanner(){
       message="Field Not Entered"
       description="Please enter a destination for your stay"
       type="error"
-      className='dateError'
+      className='fieldError'
+      closable
+      onClose={onClose}
+    />
+
+      <Alert
+      message="Hotels Not Found"
+      description="No hotels have been found for your query, try again."
+      type="error"
+      className='hotelError'
+      closable
+      onClose={onClose}
+    />
+
+     <Alert
+      message="Dates Not Aligned"
+      description="End Date should be after Start Date"
+      type="error"
+      className='dateError2'
       closable
       onClose={onClose}
     />

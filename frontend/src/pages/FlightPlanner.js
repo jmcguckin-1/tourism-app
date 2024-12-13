@@ -5,14 +5,14 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../background.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
     const [arrivalAirport, setArrival] = useState("");
     const [numAdults, setNumAdults] = useState("");
     const [numChildren, setNumChildren] = useState("");
-    const [value, onChange] = useState("");
+    const [startDate, setSD] = useState("");
     const [endDate, setED] = useState("");
     const [destOptions, setValues] = useState([]);
     const [departOptions, setDepValues] = useState([]);
@@ -20,13 +20,31 @@ function FlightPlanner(){
     const [direct, setDirect] = useState(false);
     const [oneWay, setOneWay] = useState(false);
     const [returnFlight, setReturn] = useState(false);
+    const [valid, setValid] = useState(false);
+
+       const onClose = (e) => {
+  console.log(e, 'I was closed.');
+};
 
    function sendData(){
-   document.getElementById('formEntry').style.display='none';
+    if (endDate < startDate){
+        document.getElementsByClassName('dateErrorF')[0].style.display='block';
+        setValid(false);
+    }
+    if (departingAirport === "" || arrivalAirport === ""){
+        document.getElementsByClassName('fieldErrorF')[0].style.display='block';
+        setValid(false);
+    }
+    if (endDate > startDate && departingAirport !== "" && arrivalAirport !== "") {
+        setValid(true);
+    }
+
+    if (valid){
+     document.getElementById('formEntry').style.display='none';
     document.getElementById('addOptions').style.display='none';
     document.getElementById('loadingScreen').style.display='block';
     document.getElementById('sendData').style.display='none';
-      fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + value + "&endDate=" + endDate
+    fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + startDate + "&endDate=" + endDate
       + "&direct=" + direct + "&oneWay=" + oneWay + "&returnFlight=" + returnFlight)
       .then(response => response.json())
       .then(data => {
@@ -40,12 +58,13 @@ function FlightPlanner(){
             document.getElementById('loadingScreen').style.display='none';
             document.getElementById('formEntry').style.display='block';
             document.getElementById('sendData').style.display='block';
-            alert("no flight times were found! try editing your inputs");
+            document.getElementsByClassName('flightErrorF')[0].style.display='block';
           }
-
          }, 5000);
 
       })
+    }
+
    }
 
    function setA(){
@@ -134,8 +153,35 @@ function FlightPlanner(){
     </>
 </select>
 
+   <Alert
+      message="Field Not Entered"
+      description="Please enter a destination for your stay"
+      type="error"
+      className='fieldErrorF'
+      closable
+      onClose={onClose}
+    />
+
+     <Alert
+      message="Flights Not Found"
+      description="No flights were found for your query. please try again"
+      type="error"
+      className='flightErrorF'
+      closable
+      onClose={onClose}
+    />
+
+     <Alert
+      message="Dates Not Aligned"
+      description="End Date should be after Start Date"
+      type="error"
+      className='dateErrorF'
+      closable
+      onClose={onClose}
+    />
+
         <p id='sdText'>Start Date</p>
-        <Calendar onChange={onChange} value={value} className='startDate'/>
+        <Calendar onChange={setSD} value={startDate} className='startDate'/>
         <p id='edText'>End Date</p>
         <Calendar onChange={setED} value={endDate}  className='endDate'/>
         </div>

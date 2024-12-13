@@ -59,6 +59,8 @@ public class TestService{
                     hotelData.put("id", ds.getId());
                     hotelData.put("day1", flightTimeZero);
                     hotelData.put("final_day", flightTimeOne);
+                    hotelData.put("st", flightTimeZero);
+                    hotelData.put("end", flightTimeOne);
                     li.add(hotelData);
                  }
             }

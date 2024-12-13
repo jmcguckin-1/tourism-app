@@ -149,7 +149,10 @@ select, option{
     background-color:lightblue;
 }
 
-.dateError{
+.dateError, .hotelError, .fieldError, .dateError2, .fieldErrorF, .dateErrorF{
     display:none;
     width:30%;
+    position:absolute;
+    right:2%;
+
 }
