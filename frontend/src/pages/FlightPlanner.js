@@ -1,9 +1,200 @@
 import NavBar from "../components/NavBar.js";
+import Calendar from 'react-calendar';
+import {useState, useEffect} from 'react';
+import 'react-calendar/dist/Calendar.css';
+import myData from '../data.json';
+import background from "../background.jpg";
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin, Alert } from 'antd';
+
 function FlightPlanner(){
+    const [departingAirport, setDA] = useState("");
+    const [arrivalAirport, setArrival] = useState("");
+    const [numAdults, setNumAdults] = useState("");
+    const [numChildren, setNumChildren] = useState("");
+    const [startDate, setSD] = useState("");
+    const [endDate, setED] = useState("");
+    const [destOptions, setValues] = useState([]);
+    const [departOptions, setDepValues] = useState([]);
+    const [flightData, setFD] = useState([]);
+    const [direct, setDirect] = useState(false);
+    const [oneWay, setOneWay] = useState(false);
+    const [returnFlight, setReturn] = useState(false);
+    const [valid, setValid] = useState(false);
+
+       const onClose = (e) => {
+  console.log(e, 'I was closed.');
+};
+
+   function sendData(){
+    if (endDate < startDate){
+        document.getElementsByClassName('dateErrorF')[0].style.display='block';
+        setValid(false);
+    }
+    if (departingAirport === "" || arrivalAirport === ""){
+        document.getElementsByClassName('fieldErrorF')[0].style.display='block';
+        setValid(false);
+    }
+    if (endDate > startDate && departingAirport !== "" && arrivalAirport !== "") {
+        setValid(true);
+    }
+
+    if (valid){
+     document.getElementById('formEntry').style.display='none';
+    document.getElementById('addOptions').style.display='none';
+    document.getElementById('loadingScreen').style.display='block';
+    document.getElementById('sendData').style.display='none';
+    fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + startDate + "&endDate=" + endDate
+      + "&direct=" + direct + "&oneWay=" + oneWay + "&returnFlight=" + returnFlight)
+      .then(response => response.json())
+      .then(data => {
+         setTimeout(() => {
+          if (data.length !== 0){
+           setFD(data);
+          document.getElementById('flightTimes').style.display='block';
+          document.getElementById('loadingScreen').style.display='none';
+          }
+          else{
+            document.getElementById('loadingScreen').style.display='none';
+            document.getElementById('formEntry').style.display='block';
+            document.getElementById('sendData').style.display='block';
+            document.getElementsByClassName('flightErrorF')[0].style.display='block';
+          }
+         }, 5000);
+
+      })
+    }
+
+   }
+
+   function setA(){
+    var e = document.getElementById("option2");
+    var textVal = e.options[e.selectedIndex].text;
+    setArrival(textVal);
+   }
+   function setD(){
+     var e = document.getElementById("option1");
+    var textVal = e.options[e.selectedIndex].text;
+    setDA(textVal);
+   }
+
+   function setChoices(x, y){
+        let newValues = [];
+       for (let i=0; i<myData.length; i++){
+            if(myData[i]['country_name'].includes(x)){
+                newValues.push(myData[i]);
+            }
+       }
+       if (y === "dest"){
+         setValues(newValues);
+       }
+       else{
+            setDepValues(newValues);
+       }
+   }
+
     return (
         <div>
+        <img src={background} id='bg'/>
         <NavBar/>
-        <p>Flight stuff</p>
+        <div id="loadingScreen">
+            <p>Loading your flights...</p>
+            <Spin indicator={<LoadingOutlined style={{
+            fontSize: 48,
+          }} spin />} className='spin' size="large" />
+        </div>
+        <div id='flightTimes'>
+     <>
+    {flightData.map(function(flight) {
+      return (
+        <div key={flight.id}>
+           <p>{flight.ft1} - {flight.ft2}</p>
+           <p>{flight.airline}</p>
+           <p>{flight.start} to {flight.end}</p>
+           <br/>
+           <p>Return Flight</p>
+           <p>{flight.rt1} - {flight.rt2}</p>
+            <p>{flight.end} to {flight.start}</p>
+            <p>£{flight.price}</p>
+             <br/>
+        </div>
+      )
+    })}
+    </>
+        </div>
+        <div id='formEntry'>
+         <p>Destination</p>
+         <input type='text'onChange={e => setChoices(e.target.value, "dest")}/>
+         <select id='option2' onChange={setA}>
+         <>
+    {destOptions.map(function(details) {
+      return (
+        <option key={details.airport_id}>
+             {details.country_name}
+             ({details.city_iata_code}) - {details.airport_name}
+        </option>
+      )
+    })}
+    </>
+</select>
+
+        <p>Departing:</p>
+        <input type='text' id='departing' onChange={e => setChoices(e.target.value, "depart")}/>
+<select id='option1' onChange={setD}>
+         <>
+    {departOptions.map(function(details) {
+      return (
+        <option key={details.airport_id}>
+             {details.country_name}
+             ({details.city_iata_code}) - {details.airport_name}
+        </option>
+      )
+    })}
+    </>
+</select>
+
+   <Alert
+      message="Field Not Entered"
+      description="Please enter a destination for your stay"
+      type="error"
+      className='fieldErrorF'
+      closable
+      onClose={onClose}
+    />
+
+     <Alert
+      message="Flights Not Found"
+      description="No flights were found for your query. please try again"
+      type="error"
+      className='flightErrorF'
+      closable
+      onClose={onClose}
+    />
+
+     <Alert
+      message="Dates Not Aligned"
+      description="End Date should be after Start Date"
+      type="error"
+      className='dateErrorF'
+      closable
+      onClose={onClose}
+    />
+
+        <p id='sdText'>Start Date</p>
+        <Calendar onChange={setSD} value={startDate} className='startDate'/>
+        <p id='edText'>End Date</p>
+        <Calendar onChange={setED} value={endDate}  className='endDate'/>
+        </div>
+        <button onClick={sendData} id='sendData'>Send</button>
+
+        <div id='addOptions'>
+         <br/>
+        <label>Direct Flight: </label> <input type='checkbox' onChange={e => setDirect(e.target.checked)} name='flightType'/>
+        <br/>
+        <label>One Way: </label> <input type='checkbox' onChange={e => setOneWay(e.target.checked)} name='flightType'/>
+        <br/>
+        <label>Return: </label> <input type='checkbox' onChange={e => setReturn(e.target.checked)}name='flightType'/>
+        </div>
         </div>
     )
 }

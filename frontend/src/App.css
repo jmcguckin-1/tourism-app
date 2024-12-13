@@ -32,3 +32,127 @@
 .navlink{
     color:white;
 }
+
+#formEntry, #flightTimes{
+    position:absolute;
+    left:10%;
+    top:0%;
+    width:80%;
+    color:white;
+     font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+    z-index:2;
+}
+
+#flightTimes, #hotels{
+    background-color:white;
+    color:black;
+    font-size:16px;
+    padding:1%;
+    position:absolute;
+    top:10%;
+    max-height:400px;
+    overflow:scroll;
+    display:none;
+}
+
+select, option{
+ font-family: "Afacad Flux", sans-serif;
+     font-size:15px;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+}
+
+.startDate{
+  position:absolute;
+    top:78%;
+}
+
+.endDate{
+    width:8%;
+    position:absolute;
+    right:32%;
+    top:78%;
+}
+
+.startDate1{
+  position:absolute;
+    top:92%;
+}
+
+.endDate1{
+    width:8%;
+    position:absolute;
+    right:32%;
+    top:92%;
+}
+
+#edText{
+    position:absolute;
+    left:37.5%;
+    top:56%;
+    font-size:20px;
+}
+
+#sdText{
+ font-size:20px;
+}
+
+#bg{
+    width:100%;
+}
+
+#sendData{
+    position:absolute;
+    right:7%;
+    top:63%;
+    width:20%;
+    color:white;
+    font-size:40px;
+    border:2px solid white;
+    background-color:lightblue;
+}
+
+#sendData:hover{
+    cursor:pointer;
+}
+
+#loadingScreen, .spin{
+   color:white;
+}
+
+.spin{
+    font-size:40px;
+}
+#loadingScreen, #loadingScreenHotels{
+    position:absolute;
+    top:30%;
+    left:35%;
+    font-size:40px;
+    display:none;
+}
+#addOptions, #preferences{
+    position:absolute;
+    right:2%;
+    top:30%;
+    padding:1%;
+    width:30%;
+    color:white;
+    font-size:30px;
+    background-color:lightblue;
+}
+
+.dateError, .hotelError, .fieldError, .dateError2, .fieldErrorF, .dateErrorF{
+    display:none;
+    width:30%;
+    position:absolute;
+    right:2%;
+
+}
