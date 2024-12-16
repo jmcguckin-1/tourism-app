@@ -41,6 +41,14 @@ public class TestService{
 
     }
 
+    public void addToBasket(List<Map <String,Object>> ma){
+        Firestore db = FirestoreClient.getFirestore();
+        for (Map <String, Object> e: ma){
+          ApiFuture<DocumentReference> addedDocRef = db.collection("hotel_bookings").add(e);
+        }
+
+    }
+
     public String getHotels(String destination, String startDate, String endDate, int numAdults,
     int numChildren){
         ArrayList<Map<String,Object>> li = new ArrayList<>();

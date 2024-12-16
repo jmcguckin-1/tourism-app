@@ -20,6 +20,7 @@ function BookingPlanner(){
     const [pool, setPool] = useState(false);
     const [hotelData, setHD] = useState([]);
     const [valid, setValid] = useState(false);
+    const [chosenData, setCD] = useState([]);
 
     const onClose = (e) => {
   console.log(e, 'I was closed.');
@@ -59,7 +60,6 @@ function BookingPlanner(){
               document.getElementById('loadingScreenHotels').style.display='none';
            setHD(data);
           document.getElementById('hotels').style.display='block';
-
           }
           else{
             document.getElementById('loadingScreenHotels').style.display='none';
@@ -82,10 +82,21 @@ function BookingPlanner(){
        let currentHotel = [];
        for (let i=0; i<hotelData.length; i++){
            if (hotelData[i]['id'] === x){
+                console.log("in here");
                currentHotel.push(hotelData[i]);
            }
        }
-       console.log(currentHotel[0]['accomodation_name']);
+
+       fetch("/addToBasket", {
+        "method": "POST",
+        "body": JSON.stringify(currentHotel),
+        "Content-Type": "application/json; charset=utf-8"
+       })
+       .then(response => response.json())
+       .then(data => {
+            console.log("success")
+       });
+
    }
 
  function setChoices(x){
@@ -114,7 +125,7 @@ function BookingPlanner(){
              <p>{hotel.adults} adults, {hotel.children} children</p>
             <p>£{hotel.price}</p>
             <button>View Info</button>
-            <button onClick={basketAdd(hotel.id)}>Add to Basket</button>
+            <button onClick={e => basketAdd(hotel.id)}>Add to Basket</button>
            <br/>
         </div>
       )
