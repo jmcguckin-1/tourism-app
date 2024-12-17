@@ -90,7 +90,10 @@ function BookingPlanner(){
        fetch("/addToBasket", {
         "method": "POST",
         "body": JSON.stringify(currentHotel),
-        "Content-Type": "application/json; charset=utf-8"
+        "headers": {
+        "Content-Type": "application/json"
+        }
+
        })
        .then(response => response.json())
        .then(data => {
