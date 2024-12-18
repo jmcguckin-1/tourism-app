@@ -82,7 +82,6 @@ function BookingPlanner(){
        let currentHotel = [];
        for (let i=0; i<hotelData.length; i++){
            if (hotelData[i]['id'] === x){
-                console.log("in here");
                currentHotel.push(hotelData[i]);
            }
        }

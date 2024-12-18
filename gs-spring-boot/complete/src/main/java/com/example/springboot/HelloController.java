@@ -40,6 +40,12 @@ public String findHotels(@RequestParam String destination, @RequestParam String 
 return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
 }
 
+@GetMapping("/getCartItems")
+@ResponseBody
+public String getCartItems(@RequestParam String user, @RequestParam String type){
+return ts.getCartItems(user, type);
+}
+
 
 @PostMapping("/addToBasket")
 @ResponseBody

@@ -41,10 +41,26 @@ public class TestService{
 
     }
 
+    public void getCartItems(String user, String type){
+
+    }
+
     public void addToBasket(List<Map <String,Object>> ma){
         Firestore db = FirestoreClient.getFirestore();
+        // be able to check if the current one is still there and hence append onto their hotel_booking
+        // need user accounts
+
         for (Map <String, Object> e: ma){
-          ApiFuture<DocumentReference> addedDocRef = db.collection("hotel_bookings").add(e);
+            // Check what type of map it is and add to corresponding table
+          if (e.containsKey("accomodation_name")){
+             e.remove("start_date");
+             e.remove("end_date");
+             ApiFuture<DocumentReference> addedDocRef = db.collection("hotel_bookings").add(e);
+          }
+          else if (e.containsKey("airline")){
+            ApiFuture<DocumentReference> addedFlight = db.collection("flight_bookings").add(e);
+          }
+
         }
 
     }
@@ -69,6 +85,7 @@ public class TestService{
 //                     }
                     Map<String, Object> hotelData = ds.getData();
                     hotelData.put("id", ds.getId());
+                    hotelData.put("user", "John McGuckin");
                     hotelData.put("day1", flightTimeZero);
                     hotelData.put("final_day", flightTimeOne);
                     hotelData.put("st", flightTimeZero);
@@ -120,6 +137,7 @@ public class TestService{
                  if (checkDates(flightTimeZero, startDate) && checkDates(secondOne, endDate)){
                     Map<String, Object> flightData = ds.getData();
                     flightData.put("id", ds.getId());
+                    flightData.put("user", "John McGuckin");
                     flightData.put("ft1", flightTimeZero);
                     flightData.put("ft2", flightTimeOne);
                     flightData.put("rt1", secondOne);

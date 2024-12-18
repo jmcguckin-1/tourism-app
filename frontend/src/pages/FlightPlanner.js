@@ -67,6 +67,29 @@ function FlightPlanner(){
 
    }
 
+   function addToBasket(x){
+       let currentFlight = [];
+       for (let i=0; i<flightData.length; i++){
+           if (flightData[i]['id'] === x){
+               currentFlight.push(flightData[i]);
+           }
+       }
+
+       fetch("/addToBasket", {
+        "method": "POST",
+        "body": JSON.stringify(currentFlight),
+        "headers": {
+        "Content-Type": "application/json"
+        }
+
+       })
+       .then(response => response.json())
+       .then(data => {
+            alert("flight successfully added to cart");
+       });
+
+   }
+
    function setA(){
     var e = document.getElementById("option2");
     var textVal = e.options[e.selectedIndex].text;
@@ -116,6 +139,7 @@ function FlightPlanner(){
            <p>{flight.rt1} - {flight.rt2}</p>
             <p>{flight.end} to {flight.start}</p>
             <p>£{flight.price}</p>
+            <button onClick={(e) => addToBasket(flight.id)}></button>
              <br/>
         </div>
       )
