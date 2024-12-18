@@ -1,4 +1,5 @@
 import NavBar from "../components/NavBar.js";
+import CartPane from "../components/CartPane.js";
 import Calendar from 'react-calendar';
 import {useState, useEffect} from 'react';
 import 'react-calendar/dist/Calendar.css';
@@ -96,7 +97,7 @@ function BookingPlanner(){
        })
        .then(response => response.json())
        .then(data => {
-            console.log("success")
+            console.log("success");
        });
 
    }
@@ -115,6 +116,7 @@ function BookingPlanner(){
         <div>
         <img src={background} id='bg'/>
         <NavBar/>
+        <CartPane/>
           <div id='hotels'>
      <>
     {hotelData.map(function(hotel) {

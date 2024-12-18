@@ -41,7 +41,42 @@ public class TestService{
 
     }
 
-    public void getCartItems(String user, String type){
+    public String getCartItems(String user, String type){
+    Gson gson = new Gson();
+        Firestore db = FirestoreClient.getFirestore();
+        ArrayList<Map<String,Object>> li = new ArrayList<>();
+        ArrayList<Map<String,Object>> flightLi = new ArrayList<>();
+
+        try{
+             ApiFuture<QuerySnapshot> future = db.collection("hotel_bookings").get();
+              List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("user").equals(user)) {
+                    Map<String, Object> hotelData = ds.getData();
+                    li.add(hotelData);
+                }
+                }
+
+              ApiFuture<QuerySnapshot> flights = db.collection("flight_bookings").get();
+              List<QueryDocumentSnapshot> doc1 = flights.get().getDocuments();
+                for (DocumentSnapshot ds: doc1){
+                 if (ds.getString("user").equals(user)) {
+                    Map<String, Object> flightData = ds.getData();
+                    flightLi.add(flightData);
+                }
+                }
+
+
+        }
+         catch (Exception e){
+            System.out.println(e);
+        }
+        if (type.equals("flights")){
+            return gson.toJson(flightLi);
+        }
+
+        return gson.toJson(li);
+
 
     }
 

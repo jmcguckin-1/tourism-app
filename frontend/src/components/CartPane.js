@@ -1,32 +1,65 @@
+import {useEffect, useState} from 'react';
+import {Rate} from 'antd';
 
 function CartPane(){
 
     const [flightData, setFD] = useState([]);
+    const [hotelData, setHD] = useState([]);
+    const [hotelPrice, setHP] = useState();
+    const [flightPrice, setFP] = useState();
+    const [price, setPrice] = useState();
+
 
     useEffect(() => {
-    .fetch("/getCartItems?user=John McGuckin&type=flights")
+     fetch("/getCartItems?user=John McGuckin&type=flights")
     .then(response => response.json())
     .then(data => {
         setFD(data);
+        setFP(data[0]['price']);
     })
     }, [])
 
+     useEffect(() => {
+     fetch("/getCartItems?user=John McGuckin&type=hotels")
+    .then(response => response.json())
+    .then(data => {
+        setHD(data);
+        setFP(data[0]['price']);
+
+        if (flightPrice && hotelPrice){
+            setPrice(flightPrice + hotelPrice);
+        }
+    })
+    }, [])
+
+
     return (
-        <div>
+        <div id='cartPane'>
         <h1>Current Items</h1>
           <>
     {flightData.map(function(flight) {
       return (
         <div key={flight.id}>
-           <p>{flight.ft1} - {flight.ft2}</p>
+          <p>Flight:</p>
+           <p>{flight.ft1} - {flight.rt2}</p>
            <p>{flight.airline}</p>
            <p>{flight.start} to {flight.end}</p>
            <br/>
-           <p>Return Flight</p>
-           <p>{flight.rt1} - {flight.rt2}</p>
-            <p>{flight.end} to {flight.start}</p>
-            <p>£{flight.price}</p>
-             <br/>
+        </div>
+      )
+    })}
+    </>
+
+         <>
+    {hotelData.map(function(hotel) {
+      return (
+        <div key={hotel.id}>
+          <p>Hotel:</p>
+           <p>{hotel.location}</p>
+           <p>{hotel.accomodation_name}</p>
+            <Rate disabled value={hotel.star_rating} />
+             <p>{hotel.adults} adults, {hotel.children} children</p>
+             <p>Flight + Hotel = £{price}</p>
         </div>
       )
     })}

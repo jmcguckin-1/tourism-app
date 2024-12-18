@@ -140,6 +140,7 @@ select, option{
 }
 #addOptions, #preferences{
     position:absolute;
+    display:none;
     right:2%;
     top:30%;
     padding:1%;
@@ -156,4 +157,15 @@ select, option{
     position:absolute;
     right:2%;
 
+}
+
+#cartPane{
+    position:absolute;
+    right:0;
+    bottom:0;
+    top:0;
+    background:white;
+    color:lightgray;
+    width:20%;
+    padding:1%;
 }

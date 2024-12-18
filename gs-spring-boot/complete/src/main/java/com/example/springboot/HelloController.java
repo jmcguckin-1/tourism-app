@@ -35,21 +35,21 @@ public TestService ts = new TestService();
 
 @GetMapping("/findHotels")
 @ResponseBody
-public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-@RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren){
-return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
+    public String findHotels(@RequestParam String destination, @RequestParam String startDate,
+    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren){
+    return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
 }
 
 @GetMapping("/getCartItems")
 @ResponseBody
-public String getCartItems(@RequestParam String user, @RequestParam String type){
-return ts.getCartItems(user, type);
+    public String getCartItems(@RequestParam String user, @RequestParam String type){
+    return ts.getCartItems(user, type);
 }
 
 
 @PostMapping("/addToBasket")
 @ResponseBody
-public String findHotels(@RequestBody List<Map<String,Object>> ma){
+    public String findHotels(@RequestBody List<Map<String,Object>> ma){
     Gson gson = new Gson();
     ts.addToBasket(ma);
     return gson.toJson("");
