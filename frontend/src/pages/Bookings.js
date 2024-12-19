@@ -87,7 +87,7 @@ function BookingPlanner(){
            }
        }
 
-       fetch("/addToBasket", {
+       fetch("/addToBasket?user=John McGuckin", {
         "method": "POST",
         "body": JSON.stringify(currentHotel),
         "headers": {
@@ -97,7 +97,12 @@ function BookingPlanner(){
        })
        .then(response => response.json())
        .then(data => {
-            console.log("success");
+            if (data[0]["success"]){
+                alert("a hotel has been added!");
+            }
+            else if(data[0]["basket_full"]){
+                alert("a flight and hotel have already been added!");
+            }
        });
 
    }

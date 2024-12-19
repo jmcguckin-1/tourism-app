@@ -5,8 +5,6 @@ function CartPane(){
 
     const [flightData, setFD] = useState([]);
     const [hotelData, setHD] = useState([]);
-    const [hotelPrice, setHP] = useState();
-    const [flightPrice, setFP] = useState();
     const [price, setPrice] = useState();
 
 
@@ -15,7 +13,7 @@ function CartPane(){
     .then(response => response.json())
     .then(data => {
         setFD(data);
-        setFP(data[0]['price']);
+        setPrice(data[0]['total']);
     })
     }, [])
 
@@ -24,11 +22,6 @@ function CartPane(){
     .then(response => response.json())
     .then(data => {
         setHD(data);
-        setFP(data[0]['price']);
-
-        if (flightPrice && hotelPrice){
-            setPrice(flightPrice + hotelPrice);
-        }
     })
     }, [])
 

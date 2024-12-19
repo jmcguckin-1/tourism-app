@@ -75,7 +75,7 @@ function FlightPlanner(){
            }
        }
 
-       fetch("/addToBasket", {
+       fetch("/addToBasket?user=John McGuckin", {
         "method": "POST",
         "body": JSON.stringify(currentFlight),
         "headers": {
@@ -85,7 +85,13 @@ function FlightPlanner(){
        })
        .then(response => response.json())
        .then(data => {
-            alert("flight successfully added to cart");
+             if(data[0]["basket_full"]){
+                alert("a flight and hotel have already been added!");
+            }
+            else if (data[0]["success"]){
+                alert("a flight has been added!");
+            }
+
        });
 
    }
@@ -139,7 +145,7 @@ function FlightPlanner(){
            <p>{flight.rt1} - {flight.rt2}</p>
             <p>{flight.end} to {flight.start}</p>
             <p>£{flight.price}</p>
-            <button onClick={(e) => addToBasket(flight.id)}></button>
+            <button onClick={(e) => addToBasket(flight.id)}>Add to Basket</button>
              <br/>
         </div>
       )

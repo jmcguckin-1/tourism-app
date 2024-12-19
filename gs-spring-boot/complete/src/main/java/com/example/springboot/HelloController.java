@@ -49,10 +49,9 @@ public TestService ts = new TestService();
 
 @PostMapping("/addToBasket")
 @ResponseBody
-    public String findHotels(@RequestBody List<Map<String,Object>> ma){
+    public String addToBasket(@RequestBody List<Map<String,Object>> ma, @RequestParam String user){
     Gson gson = new Gson();
-    ts.addToBasket(ma);
-    return gson.toJson("");
+    return ts.addToBasket(ma, user);
 }
 
 }
