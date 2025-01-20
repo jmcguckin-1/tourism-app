@@ -61,7 +61,7 @@ public class TestService{
               ApiFuture<QuerySnapshot> flights = db.collection("flight_bookings").get();
               List<QueryDocumentSnapshot> doc1 = flights.get().getDocuments();
                 for (DocumentSnapshot ds: doc1){
-                 if (ds.getString("user").equals(user)) {
+                 if (ds.getString("email").equals(user)) {
                     Map<String, Object> flightData = ds.getData();
                     price += ds.getDouble("price");
                     flightLi.add(flightData);

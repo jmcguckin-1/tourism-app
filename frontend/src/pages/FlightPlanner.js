@@ -7,6 +7,7 @@ import background from "../background.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin, Alert, InputNumber } from 'antd';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import CartPane from "../components/CartPane.js";
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
@@ -138,6 +139,7 @@ onAuthStateChanged(auth, (user) => {
         <div>
         <img src={background} id='bg'/>
         <NavBar/>
+        <CartPane/>
         <div id="loadingScreen">
             <p>Loading your flights...</p>
             <Spin indicator={<LoadingOutlined style={{

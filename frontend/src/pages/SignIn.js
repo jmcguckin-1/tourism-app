@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, NavLink} from 'react-router-dom';
 
 function SignIn(){
     const [name, setName] = useState("");
@@ -44,6 +44,7 @@ function SignIn(){
             <br/>
             <input type='password' placeholder='validate password' onChange={e => setPV(e.target.value)}/>
             <button onClick={signUp}>Sign Up</button>
+            <NavLink to='/login'>Have an account? Sign In!</NavLink>
         </div>
     )
 }

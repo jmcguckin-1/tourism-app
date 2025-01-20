@@ -19,26 +19,36 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 }, []);
-//    useEffect(() => {
-//     fetch("/getCartItems?user=" + email + "&type=flights")
-//    .then(response => response.json())
-//    .then(data => {
-//        setFD(data);
-//        setPrice(data[0]['total']);
-//    })
-//    }, [email])
-//
-//     useEffect(() => {
-//     fetch("/getCartItems?user=" + email + "&type=hotels")
-//    .then(response => response.json())
-//    .then(data => {
-//        setHD(data);
-//    })
-//    }, [email])
+
+    function closeCart(){
+        document.getElementById("cartPane").style.display='none';
+        document.getElementById("closeCart").style.display='none';
+        document.getElementById("openCart").style.display='block';
+    }
+
+     function viewCart(){
+     document.getElementById("cartPane").style.display='block';
+     document.getElementById("closeCart").style.display='block';
+          fetch("/getCartItems?user=" + email + "&type=flights")
+    .then(response => response.json())
+    .then(data => {
+        setFD(data);
+        setPrice(data[0]['total']);
+    })
+
+     fetch("/getCartItems?user=" + email + "&type=hotels")
+    .then(response => response.json())
+    .then(data => {
+        setHD(data);
+    })
+     }
 
 
     return (
+        <div>
+        <button id='openCart' onClick={viewCart}>View Cart</button>
         <div id='cartPane'>
+         <button id='closeCart' onClick={closeCart}>Close Cart</button>
         <h1>Current Items</h1>
           <>
     {flightData.map(function(flight) {
@@ -68,6 +78,8 @@ onAuthStateChanged(auth, (user) => {
       )
     })}
     </>
+        </div>
+
         </div>
     )
 
