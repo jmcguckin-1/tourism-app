@@ -7,6 +7,7 @@ import myData from '../data.json';
 import background from "../hotels.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin, Alert, Rate, InputNumber } from 'antd';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function BookingPlanner(){
     const [destination, setDestination] = useState("");
@@ -22,10 +23,22 @@ function BookingPlanner(){
     const [hotelData, setHD] = useState([]);
     const [valid, setValid] = useState(false);
     const [chosenData, setCD] = useState([]);
+    const [email, setEmail] = useState("");
 
     const onClose = (e) => {
   console.log(e, 'I was closed.');
 };
+
+    useEffect(() => {
+    const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    setEmail(email);
+  }
+});
+}, []);
 
    function sendData(){
    let requests = [{
@@ -87,7 +100,7 @@ function BookingPlanner(){
            }
        }
 
-       fetch("/addToBasket?user=John McGuckin", {
+       fetch("/addToBasket?user=" + email, {
         "method": "POST",
         "body": JSON.stringify(currentHotel),
         "headers": {

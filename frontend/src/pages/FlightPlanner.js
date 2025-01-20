@@ -6,6 +6,7 @@ import myData from '../data.json';
 import background from "../background.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin, Alert, InputNumber } from 'antd';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
@@ -21,10 +22,22 @@ function FlightPlanner(){
     const [oneWay, setOneWay] = useState(false);
     const [returnFlight, setReturn] = useState(false);
     const [valid, setValid] = useState(false);
+    const [email, setEmail] = useState("");
 
        const onClose = (e) => {
   console.log(e, 'I was closed.');
 };
+
+useEffect(() => {
+    const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    setEmail(email);
+  }
+});
+}, []);
 
    function sendData(){
     if (endDate < startDate){
@@ -75,7 +88,7 @@ function FlightPlanner(){
            }
        }
 
-       fetch("/addToBasket?user=John McGuckin", {
+       fetch("/addToBasket?user=" + email, {
         "method": "POST",
         "body": JSON.stringify(currentFlight),
         "headers": {
@@ -91,7 +104,6 @@ function FlightPlanner(){
             else if (data[0]["success"]){
                 alert("a flight has been added!");
             }
-
        });
 
    }

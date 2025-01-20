@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {useNavigate} from 'react-router-dom';
 
 function SignIn(){
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordValidation, setPV] = useState("");
-
+    const navigate = useNavigate();
     function signUp(){
         if (name !== "" && email !== "" && password !== "" && passwordValidation !== ""){
             if (password == passwordValidation){
@@ -14,6 +15,7 @@ function SignIn(){
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         const user = userCredential.user;
+        navigate("/flights", {replace: true});
      })
     .catch((error) => {
         const errorCode = error.code;

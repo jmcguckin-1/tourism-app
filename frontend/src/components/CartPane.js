@@ -1,29 +1,40 @@
 import {useEffect, useState} from 'react';
 import {Rate} from 'antd';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function CartPane(){
 
     const [flightData, setFD] = useState([]);
     const [hotelData, setHD] = useState([]);
     const [price, setPrice] = useState();
+    const [email, setEmail] = useState("");
 
-
-    useEffect(() => {
-     fetch("/getCartItems?user=John McGuckin&type=flights")
-    .then(response => response.json())
-    .then(data => {
-        setFD(data);
-        setPrice(data[0]['total']);
-    })
-    }, [])
-
-     useEffect(() => {
-     fetch("/getCartItems?user=John McGuckin&type=hotels")
-    .then(response => response.json())
-    .then(data => {
-        setHD(data);
-    })
-    }, [])
+      useEffect(() => {
+    const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    setEmail(email);
+  }
+});
+}, []);
+//    useEffect(() => {
+//     fetch("/getCartItems?user=" + email + "&type=flights")
+//    .then(response => response.json())
+//    .then(data => {
+//        setFD(data);
+//        setPrice(data[0]['total']);
+//    })
+//    }, [email])
+//
+//     useEffect(() => {
+//     fetch("/getCartItems?user=" + email + "&type=hotels")
+//    .then(response => response.json())
+//    .then(data => {
+//        setHD(data);
+//    })
+//    }, [email])
 
 
     return (
