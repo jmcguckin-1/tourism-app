@@ -8,6 +8,7 @@ import BookingPlanner from "./pages/Bookings.js";
 import FlightPlanner from "./pages/FlightPlanner.js";
 import SignIn from "./pages/SignIn.js";
 import Login from "./pages/Login.js";
+import Payment from "./pages/Payment.js";
 
 function App() {
 
@@ -29,6 +30,7 @@ const app = initializeApp(firebaseConfig);
     <Route path='/bookings' element={<BookingPlanner />} />
       <Route path='/flights' element={<FlightPlanner />}/>
     <Route path='/profile' element={<Profile />}/>
+    <Route path='/payment' element={<Payment />}/>
   </Routes>
   );
 }

@@ -22,6 +22,11 @@ import java.util.Date;
 import java.util.Arrays;
 import com.google.gson.Gson;
 
+import java.nio.file.Paths;
+import com.stripe.Stripe;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
+
 @Service
 public class TestService{
 
@@ -39,6 +44,29 @@ public class TestService{
         System.out.println(e);
     }
 
+    }
+
+    public void payments(double amount, String user){
+         Stripe.apiKey = "sk_test_51QjfupAOjjwqVkzkOSwj2TR1Zem8GUq6z6PG1goe5d674gqGrtvUIONBNkY58LuTpv0UkAIZU7kQH6GGHGI284Hm000iCwePvL";
+          post("/create-checkout-session", (request, response) -> {
+        String YOUR_DOMAIN = "http://localhost:3000";
+        SessionCreateParams params =
+          SessionCreateParams.builder()
+            .setMode(SessionCreateParams.Mode.PAYMENT)
+            .setSuccessUrl(YOUR_DOMAIN + "?success=true")
+            .setCancelUrl(YOUR_DOMAIN + "?canceled=true")
+            .addLineItem(
+              SessionCreateParams.LineItem.builder()
+                .setQuantity(1L)
+                // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                .setPrice("{{PRICE_ID}}")
+                .build())
+            .build();
+      Session session = Session.create(params);
+
+      response.redirect(session.getUrl(), 303);
+      return "";
+    });
     }
 
     public String getCartItems(String user, String type){
@@ -216,5 +244,4 @@ public class TestService{
        }
        return gson.toJson(li);
     }
-
 }

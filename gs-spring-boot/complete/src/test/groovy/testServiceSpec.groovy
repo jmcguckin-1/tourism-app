@@ -1,4 +1,6 @@
-class TestServiceSpec{
+import spock.lang.Specification
+
+class TestServiceSpec extends Specification{
 
     def "two plus two should equal four"() {
     given:

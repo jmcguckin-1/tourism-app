@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Rate} from 'antd';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {NavLink} from 'react-router-dom';
 
 function CartPane(){
 
@@ -48,6 +49,7 @@ onAuthStateChanged(auth, (user) => {
         <div>
         <button id='openCart' onClick={viewCart}>View Cart</button>
         <div id='cartPane'>
+         <NavLink to='/payment'>Payment</NavLink>
          <button id='closeCart' onClick={closeCart}>Close Cart</button>
         <h1>Current Items</h1>
           <>
@@ -79,7 +81,6 @@ onAuthStateChanged(auth, (user) => {
     })}
     </>
         </div>
-
         </div>
     )
 
