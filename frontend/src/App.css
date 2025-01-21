@@ -149,10 +149,24 @@ select, option{
     background-color:lightblue;
 }
 
-.dateError, .hotelError, .fieldError, .dateError2, .fieldErrorF, .dateErrorF{
+.dateError, .hotelError, .fieldError, .dateError2, .fieldErrorF,
+.dateErrorF, .guestError{
     display:none;
     width:30%;
     position:absolute;
     right:2%;
 
+}
+
+#cartPane{
+    position:absolute;
+    right:0;
+    bottom:0;
+    display:none;
+    top:0;
+    background:white;
+    color:lightgray;
+    width:20%;
+    padding:1%;
+    z-index:5;
 }

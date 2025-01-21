@@ -6,6 +6,8 @@ import { Routes, Route } from 'react-router-dom';
 import Profile from "./pages/Profile.js";
 import BookingPlanner from "./pages/Bookings.js";
 import FlightPlanner from "./pages/FlightPlanner.js";
+import SignIn from "./pages/SignIn.js";
+import Login from "./pages/Login.js";
 
 function App() {
 
@@ -20,10 +22,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-    const [name, setName] = useState("");
-
   return (
         <Routes>
+        <Route path='/' element={<SignIn/>} />
+        <Route path='/login' element={<Login/>} />
     <Route path='/bookings' element={<BookingPlanner />} />
       <Route path='/flights' element={<FlightPlanner />}/>
     <Route path='/profile' element={<Profile />}/>

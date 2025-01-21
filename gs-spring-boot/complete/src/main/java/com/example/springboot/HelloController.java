@@ -3,6 +3,7 @@ package com.example.springboot;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.io.FileNotFoundException;
@@ -15,6 +16,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import java.io.FileInputStream;
 import java.util.Map;
+import java.util.List;
+import java.util.Arrays;
+import com.google.gson.Gson;
 
 @RestController
 public class HelloController {
@@ -31,9 +35,23 @@ public TestService ts = new TestService();
 
 @GetMapping("/findHotels")
 @ResponseBody
-public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-@RequestParam String endDate){
-return ts.getHotels(destination, startDate, endDate);
+    public String findHotels(@RequestParam String destination, @RequestParam String startDate,
+    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren){
+    return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
+}
+
+@GetMapping("/getCartItems")
+@ResponseBody
+    public String getCartItems(@RequestParam String user, @RequestParam String type){
+    return ts.getCartItems(user, type);
+}
+
+
+@PostMapping("/addToBasket")
+@ResponseBody
+    public String addToBasket(@RequestBody List<Map<String,Object>> ma, @RequestParam String user){
+    Gson gson = new Gson();
+    return ts.addToBasket(ma, user);
 }
 
 }

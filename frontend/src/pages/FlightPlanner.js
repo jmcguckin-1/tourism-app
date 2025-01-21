@@ -5,7 +5,9 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../background.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin, Alert } from 'antd';
+import { Spin, Alert, InputNumber } from 'antd';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import CartPane from "../components/CartPane.js";
 
 function FlightPlanner(){
     const [departingAirport, setDA] = useState("");
@@ -21,10 +23,22 @@ function FlightPlanner(){
     const [oneWay, setOneWay] = useState(false);
     const [returnFlight, setReturn] = useState(false);
     const [valid, setValid] = useState(false);
+    const [email, setEmail] = useState("");
 
        const onClose = (e) => {
   console.log(e, 'I was closed.');
 };
+
+useEffect(() => {
+    const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    const email = user.email;
+    setEmail(email);
+  }
+});
+}, []);
 
    function sendData(){
     if (endDate < startDate){
@@ -67,6 +81,34 @@ function FlightPlanner(){
 
    }
 
+   function addToBasket(x){
+       let currentFlight = [];
+       for (let i=0; i<flightData.length; i++){
+           if (flightData[i]['id'] === x){
+               currentFlight.push(flightData[i]);
+           }
+       }
+
+       fetch("/addToBasket?user=" + email, {
+        "method": "POST",
+        "body": JSON.stringify(currentFlight),
+        "headers": {
+        "Content-Type": "application/json"
+        }
+
+       })
+       .then(response => response.json())
+       .then(data => {
+             if(data[0]["basket_full"]){
+                alert("a flight and hotel have already been added!");
+            }
+            else if (data[0]["success"]){
+                alert("a flight has been added!");
+            }
+       });
+
+   }
+
    function setA(){
     var e = document.getElementById("option2");
     var textVal = e.options[e.selectedIndex].text;
@@ -97,6 +139,7 @@ function FlightPlanner(){
         <div>
         <img src={background} id='bg'/>
         <NavBar/>
+        <CartPane/>
         <div id="loadingScreen">
             <p>Loading your flights...</p>
             <Spin indicator={<LoadingOutlined style={{
@@ -116,6 +159,7 @@ function FlightPlanner(){
            <p>{flight.rt1} - {flight.rt2}</p>
             <p>{flight.end} to {flight.start}</p>
             <p>£{flight.price}</p>
+            <button onClick={(e) => addToBasket(flight.id)}>Add to Basket</button>
              <br/>
         </div>
       )
@@ -188,6 +232,9 @@ function FlightPlanner(){
         <button onClick={sendData} id='sendData'>Send</button>
 
         <div id='addOptions'>
+        <label>Num Adults:</label> <InputNumber min={1} max={10} defaultValue={3} onChange={setNumAdults}/>
+        <br/>
+        <label>Num Children:</label> <InputNumber min={1} max={10} defaultValue={3} onChange={setNumChildren}/>
          <br/>
         <label>Direct Flight: </label> <input type='checkbox' onChange={e => setDirect(e.target.checked)} name='flightType'/>
         <br/>

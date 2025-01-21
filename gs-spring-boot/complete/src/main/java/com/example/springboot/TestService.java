@@ -41,7 +41,97 @@ public class TestService{
 
     }
 
-    public String getHotels(String destination, String startDate, String endDate){
+    public String getCartItems(String user, String type){
+        Gson gson = new Gson();
+        Firestore db = FirestoreClient.getFirestore();
+        ArrayList<Map<String,Object>> li = new ArrayList<>();
+        ArrayList<Map<String,Object>> flightLi = new ArrayList<>();
+        double price = 0.0;
+        try{
+             ApiFuture<QuerySnapshot> future = db.collection("hotel_bookings").get();
+              List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("email").equals(user)) {
+                    Map<String, Object> hotelData = ds.getData();
+                    price += ds.getDouble("price");
+                    li.add(hotelData);
+                }
+                }
+
+              ApiFuture<QuerySnapshot> flights = db.collection("flight_bookings").get();
+              List<QueryDocumentSnapshot> doc1 = flights.get().getDocuments();
+                for (DocumentSnapshot ds: doc1){
+                 if (ds.getString("email").equals(user)) {
+                    Map<String, Object> flightData = ds.getData();
+                    price += ds.getDouble("price");
+                    flightLi.add(flightData);
+                }
+              }
+        }
+         catch (Exception e){
+            System.out.println("this method:" + e);
+        }
+        if (type.equals("flights")){
+            Map<String, Object> flightData = flightLi.get(0);
+            flightData.put("total", price);
+            return gson.toJson(flightLi);
+        }
+
+        Map<String, Object> hotel = li.get(0);
+        hotel.put("total", price);
+        return gson.toJson(li);
+    }
+
+    public String addToBasket(List<Map <String,Object>> ma, String user){
+        Gson gson = new Gson();
+        ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference docRef = null;
+        // checks if user basket has only one flight and one hotel
+          try{
+             ApiFuture<QuerySnapshot> future = db.collection("users").get();
+              List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("email").equals(user)){
+                       docRef = db.collection("users").document(ds.getId());
+                     if (ds.getBoolean("flight_added") && ds.getBoolean("hotel_added")) {
+                         Map<String, Object> map = new HashMap<>();
+                         map.put("basket_full", true);
+                         li.add(map);
+                         return gson.toJson(li);
+                     }
+                   }
+                }
+        }
+         catch (Exception e){
+            System.out.println(e);
+        }
+
+        for (Map <String, Object> e: ma){
+            // Check what type of map it is and add to corresponding table
+          if (e.containsKey("accomodation_name")){
+             e.remove("start_date");
+             e.remove("end_date");
+             e.put("email", user);
+             ApiFuture<DocumentReference> addedDocRef = db.collection("hotel_bookings").add(e);
+             ApiFuture<WriteResult> future = docRef.update("hotel_added", true);
+          }
+          else if (e.containsKey("airline")){
+            e.put("email", user);
+            ApiFuture<DocumentReference> addedFlight = db.collection("flight_bookings").add(e);
+            ApiFuture<WriteResult> future = docRef.update("flight_added", true);
+          }
+
+        }
+        Map<String, Object> map = new HashMap<>();
+        li.add(map);
+        return gson.toJson(li);
+
+    }
+
+    public String getHotels(String destination, String startDate, String endDate, int numAdults,
+    int numChildren){
+        // need firebase user reference in here
         ArrayList<Map<String,Object>> li = new ArrayList<>();
         Gson gson = new Gson();
         try{
@@ -55,8 +145,12 @@ public class TestService{
                 String flightTimeZero = t.toDate().toString();
                 String flightTimeOne = t1.toDate().toString();
                  if (checkDates(flightTimeZero, startDate) && checkDates(flightTimeOne, endDate)){
+                 // add logic for that
+//                     if (numAdults == ds.getInt("adults")){
+//                     }
                     Map<String, Object> hotelData = ds.getData();
                     hotelData.put("id", ds.getId());
+                    hotelData.put("user", "John McGuckin");
                     hotelData.put("day1", flightTimeZero);
                     hotelData.put("final_day", flightTimeOne);
                     hotelData.put("st", flightTimeZero);
@@ -77,7 +171,7 @@ public class TestService{
      String[] tokens = a.split(" ");
      String firebaseDate = "";
      int count = 0;
-     while(count != 2){
+     while (count != 2){
         firebaseDate += tokens[count] + " ";
         count++;
      }
