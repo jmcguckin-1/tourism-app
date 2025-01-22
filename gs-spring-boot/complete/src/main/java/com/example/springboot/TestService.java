@@ -27,7 +27,7 @@ public class TestService{
 
     public TestService(){
          try{
-      FileInputStream serviceAccount = new FileInputStream("/Users/johnmcguckin/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
+      FileInputStream serviceAccount = new FileInputStream("/Users/john/repos/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
    FirebaseOptions options = new FirebaseOptions.Builder()
   .setCredentials(GoogleCredentials.fromStream(serviceAccount))
   .build();
