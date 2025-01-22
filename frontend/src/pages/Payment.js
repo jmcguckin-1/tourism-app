@@ -8,6 +8,20 @@ function Payment(){
     const [price, setPrice] = useState();
     const [email, setEmail] = useState("");
 
+    function payment(){
+        fetch("/payment?value="+ price + "&user=" + email, {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify({})
+        })
+            .then(response => response.json())
+            .then(data => {
+
+            });
+    }
+
     useEffect(() => {
            const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
@@ -31,7 +45,7 @@ onAuthStateChanged(auth, (user) => {
         setHD(data);
     })
     }
-    })
+    },)
     return (
     <div>
          <div>
@@ -63,11 +77,7 @@ onAuthStateChanged(auth, (user) => {
     })}
     </>
         </div>
-         <form action="/create-checkout-session" method="POST">
-      <button type="submit">
-        Payment
-      </button>
-    </form>
+       <button id='payment' onClick={payment}>Payment</button>
     </div>
 
     )

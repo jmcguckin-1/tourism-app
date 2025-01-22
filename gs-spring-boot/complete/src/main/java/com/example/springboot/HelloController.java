@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 import com.google.gson.Gson;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
 
 @RestController
 public class HelloController {
@@ -44,6 +46,12 @@ public TestService ts = new TestService();
 @ResponseBody
     public String getCartItems(@RequestParam String user, @RequestParam String type){
     return ts.getCartItems(user, type);
+}
+
+@PostMapping("/payment")
+@ResponseBody
+    public String payments(@RequestParam int value, @RequestParam String user) throws StripeException{
+    return ts.payments(value, user);
 }
 
 

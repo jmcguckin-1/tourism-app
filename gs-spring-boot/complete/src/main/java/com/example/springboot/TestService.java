@@ -24,15 +24,18 @@ import com.google.gson.Gson;
 
 import java.nio.file.Paths;
 import com.stripe.Stripe;
-import com.stripe.model.checkout.Session;
-import com.stripe.param.checkout.SessionCreateParams;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.model.PaymentIntent;
+import com.stripe.exception.StripeException;
+import spark.ModelAndView;
+import static spark.Spark.get;
 
 @Service
 public class TestService{
 
     public TestService(){
          try{
-      FileInputStream serviceAccount = new FileInputStream("/Users/johnmcguckin/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
+      FileInputStream serviceAccount = new FileInputStream("/Users/john/repos/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
    FirebaseOptions options = new FirebaseOptions.Builder()
   .setCredentials(GoogleCredentials.fromStream(serviceAccount))
   .build();
@@ -46,27 +49,21 @@ public class TestService{
 
     }
 
-    public void payments(double amount, String user){
+    public String payments(int amount, String user) throws StripeException {
          Stripe.apiKey = "sk_test_51QjfupAOjjwqVkzkOSwj2TR1Zem8GUq6z6PG1goe5d674gqGrtvUIONBNkY58LuTpv0UkAIZU7kQH6GGHGI284Hm000iCwePvL";
-          post("/create-checkout-session", (request, response) -> {
-        String YOUR_DOMAIN = "http://localhost:3000";
-        SessionCreateParams params =
-          SessionCreateParams.builder()
-            .setMode(SessionCreateParams.Mode.PAYMENT)
-            .setSuccessUrl(YOUR_DOMAIN + "?success=true")
-            .setCancelUrl(YOUR_DOMAIN + "?canceled=true")
-            .addLineItem(
-              SessionCreateParams.LineItem.builder()
-                .setQuantity(1L)
-                // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                .setPrice("{{PRICE_ID}}")
-                .build())
-            .build();
-      Session session = Session.create(params);
+         long total = amount;
+         PaymentIntentCreateParams params =
+  PaymentIntentCreateParams.builder()
+    .setAmount(total)
+    .setCurrency("gbp")
+    .setPaymentMethod("pm_card_visa")
+    .addPaymentMethodType("card")
+    .build();
 
-      response.redirect(session.getUrl(), 303);
-      return "";
-    });
+    PaymentIntent paymentIntent = PaymentIntent.create(params);
+
+    System.out.println(paymentIntent.toString());
+    return "";
     }
 
     public String getCartItems(String user, String type){

@@ -25,6 +25,7 @@ function FlightPlanner(){
     const [valid, setValid] = useState(false);
     const [email, setEmail] = useState("");
 
+
        const onClose = (e) => {
   console.log(e, 'I was closed.');
 };
