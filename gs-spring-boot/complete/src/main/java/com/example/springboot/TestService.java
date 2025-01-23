@@ -29,6 +29,8 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.exception.StripeException;
 import spark.ModelAndView;
 import static spark.Spark.get;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
 
 @Service
 public class TestService{
@@ -51,19 +53,34 @@ public class TestService{
 
     public String payments(int amount, String user) throws StripeException {
          Stripe.apiKey = "sk_test_51QjfupAOjjwqVkzkOSwj2TR1Zem8GUq6z6PG1goe5d674gqGrtvUIONBNkY58LuTpv0UkAIZU7kQH6GGHGI284Hm000iCwePvL";
-         long total = amount;
-         PaymentIntentCreateParams params =
-  PaymentIntentCreateParams.builder()
-    .setAmount(total)
-    .setCurrency("gbp")
-    .setPaymentMethod("pm_card_visa")
-    .addPaymentMethodType("card")
+    String domain = "http://localhost:3000";
+    long total = amount;
+
+    SessionCreateParams params =
+  SessionCreateParams.builder()
+    .addLineItem(
+      SessionCreateParams.LineItem.builder()
+        .setPriceData(
+          SessionCreateParams.LineItem.PriceData.builder()
+            .setCurrency("gbp")
+            .setProductData(
+              SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                .setName("booking")
+                .build()
+            )
+            .setUnitAmount(total*100)
+            .build()
+        )
+        .setQuantity(1L)
+        .build()
+    )
+    .setMode(SessionCreateParams.Mode.PAYMENT)
+    .setSuccessUrl(domain + "/success")
+    .setCancelUrl(domain + "/cancel")
     .build();
-
-    PaymentIntent paymentIntent = PaymentIntent.create(params);
-
-    System.out.println(paymentIntent.toString());
-    return "";
+      Session session = Session.create(params);
+      System.out.println(session.getUrl());
+      return "";
     }
 
     public String getCartItems(String user, String type){

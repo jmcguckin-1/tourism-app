@@ -26,7 +26,6 @@ function Payment(){
            const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    const uid = user.uid;
     const email = user.email;
     setEmail(email);
   }
