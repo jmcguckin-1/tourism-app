@@ -55,7 +55,8 @@ public class TestService{
          Stripe.apiKey = "sk_test_51QjfupAOjjwqVkzkOSwj2TR1Zem8GUq6z6PG1goe5d674gqGrtvUIONBNkY58LuTpv0UkAIZU7kQH6GGHGI284Hm000iCwePvL";
     String domain = "http://localhost:3000";
     long total = amount;
-
+     Gson gson = new Gson();
+     Map<String, Object> map = new HashMap<>();
     SessionCreateParams params =
   SessionCreateParams.builder()
     .addLineItem(
@@ -79,8 +80,8 @@ public class TestService{
     .setCancelUrl(domain + "/cancel")
     .build();
       Session session = Session.create(params);
-      System.out.println(session.getUrl());
-      return "";
+      map.put("session", session.getUrl());
+      return gson.toJson(map);
     }
 
     public String getCartItems(String user, String type){

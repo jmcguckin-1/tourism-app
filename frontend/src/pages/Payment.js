@@ -17,8 +17,8 @@ function Payment(){
             "body": JSON.stringify({})
         })
             .then(response => response.json())
-            .then(data => {
-
+            .then(data =>{
+                    window.open(data["session"]);
             });
     }
 
