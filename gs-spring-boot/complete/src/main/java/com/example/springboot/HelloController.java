@@ -58,8 +58,13 @@ public TestService ts = new TestService();
 @PostMapping("/addToBasket")
 @ResponseBody
     public String addToBasket(@RequestBody List<Map<String,Object>> ma, @RequestParam String user){
-    Gson gson = new Gson();
     return ts.addToBasket(ma, user);
 }
+
+@PostMapping("/confirmBooking")
+@ResponseBody
+    public String saveBooking (@RequestParam String user){
+        return ts.saveBooking(user);
+    }
 
 }

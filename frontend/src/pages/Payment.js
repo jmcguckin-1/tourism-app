@@ -47,20 +47,25 @@ onAuthStateChanged(auth, (user) => {
     },)
     return (
     <div>
-         <div>
-         <>
+        <select id='langFeature'>
+            <option>EN</option>
+            <option>SP</option>
+        </select>
+        <div>
+        <>
               {flightData.map(function(flight) {
       return (
-        <div key={flight.id}>
-          <p>Flight:</p>
-           <p>{flight.ft1} - {flight.rt2}</p>
-           <p>{flight.airline}</p>
-           <p>{flight.start} to {flight.end}</p>
-           <br/>
-        </div>
+          <div key={flight.id}>
+              <h1>Your Order</h1>
+              <p>Flight:</p>
+              <p>{flight.ft1} - {flight.rt2}</p>
+              <p>{flight.airline}</p>
+              <p>{flight.start} to {flight.end}</p>
+              <br/>
+          </div>
       )
-    })}
-    </>
+              })}
+         </>
          <>
     {hotelData.map(function(hotel) {
       return (
@@ -76,7 +81,7 @@ onAuthStateChanged(auth, (user) => {
     })}
     </>
         </div>
-       <button id='payment' onClick={payment}>Payment</button>
+       <button id='payment' onClick={payment}>Payment using Stripe</button>
     </div>
 
     )
