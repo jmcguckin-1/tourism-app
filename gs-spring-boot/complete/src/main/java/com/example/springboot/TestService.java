@@ -199,6 +199,7 @@ public class TestService{
                  String flightTimeOne = al.get(1).toDate().toString();
                  String secondOne = al1.get(0).toDate().toString();
                  String secondTwo = al1.get(1).toDate().toString();
+                 System.out.println(flightTimeZero);
                  if (checkDates(flightTimeZero, startDate) && checkDates(secondOne, endDate)){
                     Map<String, Object> flightData = ds.getData();
                     flightData.put("id", ds.getId());
