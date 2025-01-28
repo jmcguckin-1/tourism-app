@@ -273,7 +273,8 @@ public class TestService{
              catch(Exception e){
              System.out.println(e);
              }
-
+        Utils u = new Utils();
+        u.sendEmail(user);
         Map<String, Object> map = new HashMap<>();
         map.put("success", success);
         return gson.toJson(map);

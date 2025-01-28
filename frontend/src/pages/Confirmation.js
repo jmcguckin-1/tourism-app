@@ -19,7 +19,9 @@ onAuthStateChanged(auth, (user) => {
       fetch("confirmBooking?user=" + email)
           .then(response => response.json())
           .then(data =>  {
-
+                if(data[0]["success"]){
+                   document.getElementById("processed").style.display = 'block';
+                }
           })
   }
 });
@@ -30,7 +32,8 @@ onAuthStateChanged(auth, (user) => {
     return (
 
         <div>
-            <p>Order Processed</p>
+            <p id="processed">Order Processed</p>
+            <p>Your details will be sent to {email} and you can view in current bookings</p>
         </div>
     )
 }

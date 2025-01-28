@@ -26,6 +26,7 @@ import com.stripe.exception.StripeException;
 public class HelloController {
 
 public TestService ts = new TestService();
+public Utils utils = new Utils();
 
 @GetMapping("/findFlights")
 @ResponseBody
@@ -60,6 +61,13 @@ public TestService ts = new TestService();
     public String addToBasket(@RequestBody List<Map<String,Object>> ma, @RequestParam String user){
     return ts.addToBasket(ma, user);
 }
+
+@GetMapping("/sendEmail")
+@ResponseBody
+    public String sendEmail(@RequestParam String recipient){
+        utils.sendEmail(recipient);
+        return "";
+    }
 
 @PostMapping("/confirmBooking")
 @ResponseBody
