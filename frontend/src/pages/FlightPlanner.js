@@ -58,6 +58,7 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('addOptions').style.display='none';
     document.getElementById('loadingScreen').style.display='block';
     document.getElementById('sendData').style.display='none';
+
     fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + startDate + "&endDate=" + endDate
       + "&direct=" + direct + "&oneWay=" + oneWay + "&returnFlight=" + returnFlight)
       .then(response => response.json())

@@ -3,3 +3,6 @@ build-ui:
 
 build-java-api:
 	@cd gs-spring-boot/complete && ./mvnw spring-boot:run
+
+test:
+	@cd gs-spring-boot/complete && ./mvnw test

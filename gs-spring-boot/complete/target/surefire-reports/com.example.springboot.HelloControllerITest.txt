@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: com.example.springboot.HelloControllerITest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 3.341 s <<< FAILURE! -- in com.example.springboot.HelloControllerITest
+com.example.springboot.HelloControllerITest.getHello -- Time elapsed: 0.804 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+
+expected: "Greetings from Spring Boot!"
+ but was: "{"timestamp":"2025-01-27T15:38:47.389+00:00","status":404,"error":"Not Found","path":"/"}"
+	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:501)
+	at com.example.springboot.HelloControllerITest.getHello(HelloControllerITest.java:21)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
