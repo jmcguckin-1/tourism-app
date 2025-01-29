@@ -251,10 +251,14 @@ public class TestService{
         List<Map<String,Object>> hotelsMap = gson.fromJson(hotels, List.class);
         List<Map<String,Object>> flightsMap = gson.fromJson(flights, List.class);
 
+        Utils u = new Utils();
+        u.sendEmail(user, hotelsMap.get(0), flightsMap.get(0));
+
         Map newMap = new HashMap<String,Object>();
         newMap.put("hotel", hotelsMap.get(0));
         newMap.put("flights", flightsMap.get(0));
         ApiFuture<DocumentReference> addedDocRef = db.collection("confirmed_bookings").add(newMap);
+
         ApiFuture<WriteResult> future = docRef.update("hotel_added", false);
         ApiFuture<WriteResult> future2 = docRef.update("flight_added", false);
         success = true;
@@ -273,8 +277,6 @@ public class TestService{
              catch(Exception e){
              System.out.println(e);
              }
-        Utils u = new Utils();
-        u.sendEmail(user);
         Map<String, Object> map = new HashMap<>();
         map.put("success", success);
         return gson.toJson(map);

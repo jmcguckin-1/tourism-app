@@ -128,6 +128,7 @@ onAuthStateChanged(auth, (user) => {
             }
        }
        setDValues(newValues);
+       setDestination(newValues[0]);
    }
 
     return (

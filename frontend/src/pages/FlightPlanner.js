@@ -41,6 +41,7 @@ onAuthStateChanged(auth, (user) => {
 });
 }, []);
 
+
    function sendData(){
     if (endDate < startDate){
         document.getElementsByClassName('dateErrorF')[0].style.display='block';
@@ -121,7 +122,7 @@ onAuthStateChanged(auth, (user) => {
     setDA(textVal);
    }
 
-   function setChoices(x, y){
+    function setChoices(x, y){
         let newValues = [];
        for (let i=0; i<myData.length; i++){
             if(myData[i]['country_name'].includes(x)){
@@ -130,10 +131,13 @@ onAuthStateChanged(auth, (user) => {
        }
        if (y === "dest"){
          setValues(newValues);
+         setA();
        }
        else{
-            setDepValues(newValues);
+           setDepValues(newValues);
+           setD();
        }
+
    }
 
     return (

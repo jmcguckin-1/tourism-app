@@ -13,7 +13,7 @@ public class Utils{
 
       }
 
-     public void sendEmail (String recipient) {
+     public void sendEmail (String recipient, Map<String,Object> hotelsContent, Map<String,Object> flightsContent) {
       String sender = "jmcguckin308@gmail.com";
       String host = "127.0.0.1";
       Properties properties = System.getProperties();
@@ -39,8 +39,8 @@ public class Utils{
          message.setFrom(new InternetAddress(sender));
          message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 
-         message.setSubject("This is Subject");
-         message.setText("This is a test mail");
+         message.setSubject("Booking Confirmation for " + recipient);
+         message.setText("Destination: " + hotelsContent.get("location") + "\n");
 
          Transport.send(message);
          System.out.println("Mail successfully sent");

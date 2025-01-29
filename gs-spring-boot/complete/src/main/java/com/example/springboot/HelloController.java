@@ -64,8 +64,8 @@ public Utils utils = new Utils();
 
 @GetMapping("/sendEmail")
 @ResponseBody
-    public String sendEmail(@RequestParam String recipient){
-        utils.sendEmail(recipient);
+    public String sendEmail(@RequestParam String recipient, @RequestParam Map<String,Object> hotelContent, @RequestParam Map<String,Object> flightContent){
+        utils.sendEmail(recipient, hotelContent, flightContent);
         return "";
     }
 

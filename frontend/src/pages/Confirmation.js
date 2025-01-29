@@ -14,8 +14,6 @@ onAuthStateChanged(auth, (user) => {
   }
 
   if (email){
-      // need to add to saved bookings
-      // new endpoint
       fetch("confirmBooking?user=" + email)
           .then(response => response.json())
           .then(data =>  {
