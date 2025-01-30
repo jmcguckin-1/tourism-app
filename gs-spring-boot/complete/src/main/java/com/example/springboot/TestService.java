@@ -226,6 +226,23 @@ public class TestService{
 
     }
 
+    public void removeData(String user, String collection){
+         Firestore db = FirestoreClient.getFirestore();
+           try{
+             ApiFuture<QuerySnapshot> future3 = db.collection(collection).get();
+              List<QueryDocumentSnapshot> documents = future3.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("email").equals(user)){
+                       db.collection(collection).document(ds.getId()).delete();
+                   }
+                }
+
+             }
+             catch(Exception e){
+             System.out.println(e);
+             }
+    }
+
     public String saveBooking(String user){
         Gson gson = new Gson();
         boolean success = false;
@@ -263,20 +280,10 @@ public class TestService{
         ApiFuture<WriteResult> future2 = docRef.update("flight_added", false);
         success = true;
 
-        // need to remove from bookings too
-          try{
-             ApiFuture<QuerySnapshot> future3 = db.collection("bookings").get();
-              List<QueryDocumentSnapshot> documents = future3.get().getDocuments();
-                for (DocumentSnapshot ds: documents){
-                   if (ds.getString("email").equals(user)){
-                       db.collection("bookings").document(ds.getId()).delete();
-                   }
-                }
+        removeData(user, "flight_bookings");
+        removeData(user, "hotel_bookings");
+        removeData(user, "bookings");
 
-             }
-             catch(Exception e){
-             System.out.println(e);
-             }
         Map<String, Object> map = new HashMap<>();
         map.put("success", success);
         return gson.toJson(map);

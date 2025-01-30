@@ -62,16 +62,10 @@ public Utils utils = new Utils();
     return ts.addToBasket(ma, user);
 }
 
-@GetMapping("/sendEmail")
-@ResponseBody
-    public String sendEmail(@RequestParam String recipient, @RequestParam Map<String,Object> hotelContent, @RequestParam Map<String,Object> flightContent){
-        utils.sendEmail(recipient, hotelContent, flightContent);
-        return "";
-    }
 
 @PostMapping("/confirmBooking")
 @ResponseBody
-    public String saveBooking (@RequestParam String user){
+    public String saveBooking(@RequestParam String user){
         return ts.saveBooking(user);
     }
 

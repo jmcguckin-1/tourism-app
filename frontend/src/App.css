@@ -132,6 +132,11 @@ select, option{
 
 }
 
+#openCart{
+    z-index:10;
+    position:absolute;
+}
+
 #sendData:hover{
     cursor:pointer;
 }

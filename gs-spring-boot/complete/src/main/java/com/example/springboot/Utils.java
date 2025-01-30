@@ -14,6 +14,7 @@ public class Utils{
       }
 
      public void sendEmail (String recipient, Map<String,Object> hotelsContent, Map<String,Object> flightsContent) {
+     System.out.println("in here!");
       String sender = "jmcguckin308@gmail.com";
       String host = "127.0.0.1";
       Properties properties = System.getProperties();
@@ -47,7 +48,8 @@ public class Utils{
       }
       catch (MessagingException mex)
       {
-         mex.printStackTrace();
+         System.out.println("error:" + mex);
+
       }
     }
 }

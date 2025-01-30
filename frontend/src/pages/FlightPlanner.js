@@ -10,8 +10,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import CartPane from "../components/CartPane.js";
 
 function FlightPlanner(){
-    const [departingAirport, setDA] = useState("New York, United States(JFK) - John F. Kennedy Airport");
-    const [arrivalAirport, setArrival] = useState("Dublin,Ireland(DUB) - Dublin International");
+    const [departingAirport, setDA] = useState("");
+    const [arrivalAirport, setArrival] = useState("");
     const [numAdults, setNumAdults] = useState("");
     const [numChildren, setNumChildren] = useState("");
     const [startDate, setSD] = useState("");
@@ -56,6 +56,8 @@ onAuthStateChanged(auth, (user) => {
     }
 
     if (valid){
+        console.log(arrivalAirport);
+        console.log(departingAirport);
      document.getElementById('formEntry').style.display='none';
     document.getElementById('addOptions').style.display='none';
     document.getElementById('loadingScreen').style.display='block';

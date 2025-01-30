@@ -14,7 +14,13 @@ onAuthStateChanged(auth, (user) => {
   }
 
   if (email){
-      fetch("confirmBooking?user=" + email)
+      fetch("confirmBooking?user=" + email, {
+          "method": "POST",
+          "headers": {
+              "Content-Type": "application/json"
+          },
+          "body": JSON.stringify({})
+      })
           .then(response => response.json())
           .then(data =>  {
                 if(data[0]["success"]){

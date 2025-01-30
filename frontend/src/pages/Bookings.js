@@ -10,7 +10,7 @@ import { Spin, Alert, Rate, InputNumber } from 'antd';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function BookingPlanner(){
-    const [destination, setDestination] = useState("");
+    const [destination, setDestination] = useState("New York, United States(JFK) - John F. Kennedy Airport");
     const [numChildren, setNumChildren] = useState("");
     const [numAdults, setAdults] = useState();
     const [startDate, setStartDate] = useState();
