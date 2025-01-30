@@ -1,5 +1,11 @@
 import NavBar from "../components/NavBar.js";
+import {useEffect, useState} from "react";
+
 function Profile(){
+
+    useEffect(() => {
+
+    })
     return (
         <div>
         <NavBar/>

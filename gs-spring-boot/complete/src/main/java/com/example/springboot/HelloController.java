@@ -69,4 +69,29 @@ public Utils utils = new Utils();
         return ts.saveBooking(user);
     }
 
+@GetMapping("/getUserDetails")
+@ResponseBody
+    public String getDetails(@RequestParam String user){
+        return ts.getDetails(user);
+    }
+
+@GetMapping("/getBookings")
+@ResponseBody
+    public String getBookings(@RequestParam String user){
+        return ts.getBookings(user);
+    }
+@GetMapping("/getSavedBookings")
+@ResponseBody
+    public String getSavedBookings(@RequestParam String user){
+        return ts.getSavedBookings(user);
+    }
+
+@GetMapping("/getReviews")
+@ResponseBody
+    public String getReviews(@RequestParam String user){
+        return ts.getReviews(user);
+    }
+
 }
+
+

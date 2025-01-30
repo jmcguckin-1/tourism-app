@@ -226,6 +226,30 @@ public class TestService{
 
     }
 
+    public String getDetails(String user){
+        // user's name
+        // email
+        // status
+        // reviews left
+        return "";
+    }
+
+    // stays they have booked
+    public String getBookings(String user){
+        return "";
+    }
+
+    // bookings they save for later
+    public String getSavedBookings(String user){
+        return "";
+    }
+
+    // reviews on holidays
+    public String getReviews(String user){
+        return "";
+    }
+
+
     public void removeData(String user, String collection){
          Firestore db = FirestoreClient.getFirestore();
            try{
