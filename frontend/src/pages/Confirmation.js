@@ -16,8 +16,7 @@ onAuthStateChanged(auth, (user) => {
 }, []);
 
 
-    useEffect(() => {
-         if (email){
+  function confirmBooking(){
       fetch("confirmBooking?user=" + email, {
           "method": "POST",
           "headers": {
@@ -32,14 +31,13 @@ onAuthStateChanged(auth, (user) => {
                 }
           })
   }
-    },[])
-
 
 
     return (
 
         <div>
             <p id="processed">Order Processed</p>
+            <button onClick={confirmBooking}>Confirm Booking</button>
             <p>Your details will be sent to {email} and you can view in current bookings</p>
         </div>
     )
