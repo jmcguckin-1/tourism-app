@@ -12,8 +12,12 @@ onAuthStateChanged(auth, (user) => {
     const email = user.email;
     setEmail(email);
   }
+});
+}, []);
 
-  if (email){
+
+    useEffect(() => {
+         if (email){
       fetch("confirmBooking?user=" + email, {
           "method": "POST",
           "headers": {
@@ -28,8 +32,7 @@ onAuthStateChanged(auth, (user) => {
                 }
           })
   }
-});
-}, []);
+    },[])
 
 
 

@@ -41,7 +41,11 @@ public class Utils{
          message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 
          message.setSubject("Booking Confirmation for " + recipient);
-         message.setText("Destination: " + hotelsContent.get("location") + "\n");
+         String text = "Destination: " + hotelsContent.get("location") + "\n" + "Stay:" + hotelsContent.get("st") + "-" + hotelsContent.get("end")
+                        + "\n" + "Flying from " + flightsContent.get("start") + "\n" +
+                        "Total: " + flightsContent.get("total") + "- Paid (via Stripe)" + "\n" + "We hope you have a great trip!";
+
+         message.setText(text);
 
          Transport.send(message);
          System.out.println("Mail successfully sent");
