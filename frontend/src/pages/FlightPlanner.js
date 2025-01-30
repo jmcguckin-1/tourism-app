@@ -25,6 +25,7 @@ function FlightPlanner(){
     const [valid, setValid] = useState(false);
     const [email, setEmail] = useState("");
 
+
        const onClose = (e) => {
   console.log(e, 'I was closed.');
 };
@@ -39,6 +40,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 }, []);
+
 
    function sendData(){
     if (endDate < startDate){
@@ -120,7 +122,7 @@ onAuthStateChanged(auth, (user) => {
     setDA(textVal);
    }
 
-   function setChoices(x, y){
+    function setChoices(x, y){
         let newValues = [];
        for (let i=0; i<myData.length; i++){
             if(myData[i]['country_name'].includes(x)){
@@ -131,12 +133,12 @@ onAuthStateChanged(auth, (user) => {
          setValues(newValues);
        }
        else{
-            setDepValues(newValues);
+           setDepValues(newValues);
        }
    }
 
     return (
-        <div>
+        <div id='container'>
         <img src={background} id='bg'/>
         <NavBar/>
         <CartPane/>

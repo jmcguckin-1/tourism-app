@@ -19,11 +19,14 @@ import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 import com.google.gson.Gson;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
 
 @RestController
 public class HelloController {
 
 public TestService ts = new TestService();
+public Utils utils = new Utils();
 
 @GetMapping("/findFlights")
 @ResponseBody
@@ -46,12 +49,24 @@ public TestService ts = new TestService();
     return ts.getCartItems(user, type);
 }
 
+@PostMapping("/payment")
+@ResponseBody
+    public String payments(@RequestParam int value, @RequestParam String user) throws StripeException{
+    return ts.payments(value, user);
+}
+
 
 @PostMapping("/addToBasket")
 @ResponseBody
     public String addToBasket(@RequestBody List<Map<String,Object>> ma, @RequestParam String user){
-    Gson gson = new Gson();
     return ts.addToBasket(ma, user);
 }
+
+
+@PostMapping("/confirmBooking")
+@ResponseBody
+    public String saveBooking(@RequestParam String user){
+        return ts.saveBooking(user);
+    }
 
 }

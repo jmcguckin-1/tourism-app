@@ -20,9 +20,16 @@ signInWithEmailAndPassword(auth, email, password)
     }
     return (
         <div>
+            <br/>
             <input type='text' placeholder='Enter email' onChange={(e) => setEmail(e.target.value)}/>
+            <br/>
+            <br/>
             <input type='password' placeholder='Enter password' onChange={(e) => setPassword(e.target.value)}/>
+            <br/>
+            <br/>
             <button onClick={signIn}>Sign In</button>
+            <br/>
+            <br/>
             <NavLink to='/'>Need to sign up? Click here!</NavLink>
         </div>
     )

@@ -72,14 +72,18 @@ select, option{
 
 .startDate{
   position:absolute;
-    top:78%;
+    top:95%;
+}
+#container{
+    width:100%;
+    height:auto;
 }
 
 .endDate{
     width:8%;
     position:absolute;
-    right:32%;
-    top:78%;
+    right:42%;
+    top:95%;
 }
 
 .startDate1{
@@ -96,8 +100,8 @@ select, option{
 
 #edText{
     position:absolute;
-    left:37.5%;
-    top:56%;
+    left:34%;
+    top:74%;
     font-size:20px;
 }
 
@@ -107,17 +111,30 @@ select, option{
 
 #bg{
     width:100%;
+    position:absolute;
+    left:0;
+    height:80%;
 }
 
 #sendData{
     position:absolute;
-    right:7%;
+    right:8.5%;
     top:63%;
     width:20%;
     color:white;
     font-size:40px;
     border:2px solid white;
     background-color:lightblue;
+}
+
+#formEntry p{
+    font-size:22px;
+
+}
+
+#openCart{
+    z-index:10;
+    position:absolute;
 }
 
 #sendData:hover{

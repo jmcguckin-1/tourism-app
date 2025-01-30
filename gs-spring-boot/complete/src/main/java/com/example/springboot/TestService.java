@@ -22,16 +22,26 @@ import java.util.Date;
 import java.util.Arrays;
 import com.google.gson.Gson;
 
+import java.nio.file.Paths;
+import com.stripe.Stripe;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.model.PaymentIntent;
+import com.stripe.exception.StripeException;
+import spark.ModelAndView;
+import static spark.Spark.get;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
+
 @Service
 public class TestService{
 
     public TestService(){
          try{
-      FileInputStream serviceAccount = new FileInputStream("/Users/johnmcguckin/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
+      FileInputStream serviceAccount = new FileInputStream("/Users/john/repos/tourism-app/gs-spring-boot/complete/src/main/java/com/example/springboot/tourism-app-fd1ae-firebase-adminsdk-muvsn-8c79789f53.json");
    FirebaseOptions options = new FirebaseOptions.Builder()
   .setCredentials(GoogleCredentials.fromStream(serviceAccount))
   .build();
-   if(FirebaseApp.getApps().isEmpty()) {
+   if (FirebaseApp.getApps().isEmpty()) {
    FirebaseApp.initializeApp(options);
    }
 
@@ -39,6 +49,39 @@ public class TestService{
         System.out.println(e);
     }
 
+    }
+
+    public String payments(int amount, String user) throws StripeException {
+         Stripe.apiKey = "sk_test_51QjfupAOjjwqVkzkOSwj2TR1Zem8GUq6z6PG1goe5d674gqGrtvUIONBNkY58LuTpv0UkAIZU7kQH6GGHGI284Hm000iCwePvL";
+         String domain = "http://localhost:3000";
+         long total = amount;
+         Gson gson = new Gson();
+         Map<String, Object> map = new HashMap<>();
+    SessionCreateParams params =
+  SessionCreateParams.builder()
+    .addLineItem(
+      SessionCreateParams.LineItem.builder()
+        .setPriceData(
+          SessionCreateParams.LineItem.PriceData.builder()
+            .setCurrency("gbp")
+            .setProductData(
+              SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                .setName("booking")
+                .build()
+            )
+            .setUnitAmount(total*100)
+            .build()
+        )
+        .setQuantity(1L)
+        .build()
+    )
+    .setMode(SessionCreateParams.Mode.PAYMENT)
+    .setSuccessUrl(domain + "/confirmation")
+    .setCancelUrl(domain + "/cancel")
+    .build();
+      Session session = Session.create(params);
+      map.put("session", session.getUrl());
+      return gson.toJson(map);
     }
 
     public String getCartItems(String user, String type){
@@ -183,6 +226,69 @@ public class TestService{
 
     }
 
+    public void removeData(String user, String collection){
+         Firestore db = FirestoreClient.getFirestore();
+           try{
+             ApiFuture<QuerySnapshot> future3 = db.collection(collection).get();
+              List<QueryDocumentSnapshot> documents = future3.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("email").equals(user)){
+                       db.collection(collection).document(ds.getId()).delete();
+                   }
+                }
+
+             }
+             catch(Exception e){
+             System.out.println(e);
+             }
+    }
+
+    public String saveBooking(String user){
+        Gson gson = new Gson();
+        boolean success = false;
+
+         DocumentReference docRef = null;
+          Firestore db = FirestoreClient.getFirestore();
+          try{
+             ApiFuture<QuerySnapshot> future = db.collection("users").get();
+              List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("email").equals(user)){
+                       docRef = db.collection("users").document(ds.getId());
+                       }
+                }
+
+             }
+             catch(Exception e){
+             System.out.println(e);
+             }
+
+        String hotels = getCartItems(user, "hotels");
+        String flights = getCartItems(user, "flights");
+        List<Map<String,Object>> hotelsMap = gson.fromJson(hotels, List.class);
+        List<Map<String,Object>> flightsMap = gson.fromJson(flights, List.class);
+
+        Utils u = new Utils();
+        u.sendEmail(user, hotelsMap.get(0), flightsMap.get(0));
+
+        Map newMap = new HashMap<String,Object>();
+        newMap.put("hotel", hotelsMap.get(0));
+        newMap.put("flights", flightsMap.get(0));
+        ApiFuture<DocumentReference> addedDocRef = db.collection("confirmed_bookings").add(newMap);
+
+        ApiFuture<WriteResult> future = docRef.update("hotel_added", false);
+        ApiFuture<WriteResult> future2 = docRef.update("flight_added", false);
+        success = true;
+
+        removeData(user, "flight_bookings");
+        removeData(user, "hotel_bookings");
+        removeData(user, "bookings");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", success);
+        return gson.toJson(map);
+    }
+
     public String getFlights(String start, String end, String startDate, String endDate, boolean direct,
     boolean oneWay, boolean returnFlight){
        ArrayList<Map<String,Object>> li = new ArrayList<>();
@@ -216,5 +322,4 @@ public class TestService{
        }
        return gson.toJson(li);
     }
-
 }
