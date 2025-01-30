@@ -4,20 +4,9 @@ import {getAuth, onAuthStateChanged} from "firebase/auth";
 function Confirmation (){
     const [email, setEmail] = useState("");
 
-    useEffect(() => {
-    const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    const email = user.email;
-    setEmail(email);
-  }
-});
-}, []);
-
-
-  function confirmBooking(){
-      fetch("confirmBooking?user=" + email, {
+     function confirmBooking(){
+      if (email){
+           fetch("confirmBooking?user=" + email, {
           "method": "POST",
           "headers": {
               "Content-Type": "application/json"
@@ -26,12 +15,23 @@ onAuthStateChanged(auth, (user) => {
       })
           .then(response => response.json())
           .then(data =>  {
-                if(data[0]["success"]){
+                if(data["success"]){
                    document.getElementById("processed").style.display = 'block';
                 }
           })
+      }
+
   }
 
+    useEffect(() => {
+    const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const email = user.email;
+    setEmail(email);
+  }
+});
+}, []);
 
     return (
 
