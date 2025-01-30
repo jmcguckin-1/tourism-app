@@ -56,8 +56,6 @@ onAuthStateChanged(auth, (user) => {
     }
 
     if (valid){
-        console.log(arrivalAirport);
-        console.log(departingAirport);
      document.getElementById('formEntry').style.display='none';
     document.getElementById('addOptions').style.display='none';
     document.getElementById('loadingScreen').style.display='block';
