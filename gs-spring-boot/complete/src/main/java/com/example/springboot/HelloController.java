@@ -80,6 +80,7 @@ public Utils utils = new Utils();
     public String getBookings(@RequestParam String user){
         return ts.getBookings(user);
     }
+
 @GetMapping("/getSavedBookings")
 @ResponseBody
     public String getSavedBookings(@RequestParam String user){

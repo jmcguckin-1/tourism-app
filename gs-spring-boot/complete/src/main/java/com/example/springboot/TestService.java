@@ -236,7 +236,31 @@ public class TestService{
 
     // stays they have booked
     public String getBookings(String user){
-        return "";
+    System.out.println("in booking method");
+        ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("confirmed_bookings").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            Map<String, Object> ma = (Map<String, Object>) ds.get("flights");
+            if (ma.get("email").equals(user)) {
+              Map map = new HashMap<String, Object>();
+              map.put("id", ma.get("id"));
+              map.put("start", ma.get("start"));
+              map.put("ft1", ma.get("ft1"));
+              map.put("rt2", ma.get("rt2"));
+              li.add(map);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+
+       return gson.toJson(li);
     }
 
     // bookings they save for later

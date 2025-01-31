@@ -137,6 +137,10 @@ select, option{
     position:absolute;
 }
 
+#reviewForm{
+    display:none;
+}
+
 #sendData:hover{
     cursor:pointer;
 }
