@@ -234,9 +234,17 @@ public class TestService{
         return "";
     }
 
+    public void leaveReview(String user, String review, int stars){
+         Firestore db = FirestoreClient.getFirestore();
+         Map ma = new HashMap<String,Object>();
+         ma.put("user", user);
+         ma.put("review", review);
+         ma.put("stars", stars);
+         ApiFuture<DocumentReference> addedDocRef = db.collection("reviews").add(ma);
+    }
+
     // stays they have booked
     public String getBookings(String user){
-    System.out.println("in booking method");
         ArrayList<Map<String,Object>> li = new ArrayList<>();
         Gson gson = new Gson();
         try{

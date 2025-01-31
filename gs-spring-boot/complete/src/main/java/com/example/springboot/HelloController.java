@@ -93,6 +93,10 @@ public Utils utils = new Utils();
         return ts.getReviews(user);
     }
 
+@PostMapping("/leaveReview")
+@ResponseBody
+    public String leaveReview(@RequestParam String user, @RequestParam String review, @RequestParam int stars){
+        ts.leaveReview(user, review, stars);
+        return "";
+    }
 }
-
-

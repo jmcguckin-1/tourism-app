@@ -8,6 +8,7 @@ function Profile(){
     const [rating, setRating] = useState(2);
     const [currentUser, setCU] = useState("");
     const [bookingData, setData] = useState([]);
+    const [review, setReview] = useState("");
 
     useEffect(() => {
            const auth = getAuth();
@@ -27,6 +28,20 @@ onAuthStateChanged(auth, (user) => {
     function reviewView(){
         document.getElementById("reviewForm").style.display = 'block';
         document.getElementById("leaveReview").style.display = 'none';
+    }
+
+    function sendReview(){
+        fetch("/leaveReview?user=" + currentUser + "&review=" + review  + "&stars=" + rating, {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({})
+        })
+            .then(response => response.json())
+            .then(data => {
+
+            })
     }
 
     return (
@@ -50,13 +65,13 @@ onAuthStateChanged(auth, (user) => {
     </>
            </select>
                 <p>Leave review</p>
-                <textarea>
+                <textarea onChange={(e) => setReview(e.target.value)}>
 
                 </textarea>
 
                 <Rate value={rating} onChange={setRating}/>
 
-                <button>Place Review</button>
+                <button onClick={sendReview}>Place Review</button>
             </div>
         </div>
     )
