@@ -278,9 +278,27 @@ public class TestService{
         return "";
     }
 
-    // reviews on holidays
-    public String getReviews(String user){
-        return "";
+    public String getReviews(String holiday){
+         ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("reviews").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (holiday.equals(ds.get("holiday"))){
+                  Map<String, Object> reviewData = ds.getData();
+                  reviewData.put("id", ds.getId());
+                  li.add(reviewData);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+
+       return gson.toJson(li);
     }
 
 

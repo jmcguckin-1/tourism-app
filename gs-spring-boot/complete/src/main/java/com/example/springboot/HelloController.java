@@ -89,8 +89,8 @@ public Utils utils = new Utils();
 
 @GetMapping("/getReviews")
 @ResponseBody
-    public String getReviews(@RequestParam String user){
-        return ts.getReviews(user);
+    public String getReviews(@RequestParam String holiday){
+        return ts.getReviews(holiday);
     }
 
 @PostMapping("/leaveReview")
