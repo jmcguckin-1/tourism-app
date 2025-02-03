@@ -234,12 +234,13 @@ public class TestService{
         return "";
     }
 
-    public void leaveReview(String user, String review, int stars){
+    public void leaveReview(String user, String review, int stars, String holiday){
          Firestore db = FirestoreClient.getFirestore();
          Map ma = new HashMap<String,Object>();
          ma.put("user", user);
          ma.put("review", review);
          ma.put("stars", stars);
+         ma.put("holiday", holiday);
          ApiFuture<DocumentReference> addedDocRef = db.collection("reviews").add(ma);
     }
 
@@ -257,6 +258,7 @@ public class TestService{
               Map map = new HashMap<String, Object>();
               map.put("id", ma.get("id"));
               map.put("start", ma.get("start"));
+              map.put("end", ma.get("end"));
               map.put("ft1", ma.get("ft1"));
               map.put("rt2", ma.get("rt2"));
               li.add(map);

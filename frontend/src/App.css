@@ -139,6 +139,23 @@ select, option{
 
 #reviewForm{
     display:none;
+    position:absolute;
+    top:12%;
+    left:30%;
+    padding:2%;
+    width:34%;
+    background-color: white;
+    font-size:20px;
+}
+
+#reviewForm button{
+    font-size:20px;
+}
+
+#reviewForm textarea{
+    width:80%;
+    height:40%;
+    font-size:20px;
 }
 
 #sendData:hover{
@@ -190,4 +207,17 @@ select, option{
     width:20%;
     padding:1%;
     z-index:5;
+}
+
+#leaveR{
+    cursor:pointer;
+    position: absolute;
+    background-color:white;
+    padding:1%;
+}
+
+#profileBg{
+    width:100%;
+    height:86%;
+    position: absolute;
 }

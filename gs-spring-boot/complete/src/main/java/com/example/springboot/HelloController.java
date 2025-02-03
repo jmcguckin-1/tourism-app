@@ -95,8 +95,8 @@ public Utils utils = new Utils();
 
 @PostMapping("/leaveReview")
 @ResponseBody
-    public String leaveReview(@RequestParam String user, @RequestParam String review, @RequestParam int stars){
-        ts.leaveReview(user, review, stars);
+    public String leaveReview(@RequestParam String user, @RequestParam String review, @RequestParam int stars, @RequestParam String holiday){
+        ts.leaveReview(user, review, stars, holiday);
         return "";
     }
 }
