@@ -99,4 +99,11 @@ public Utils utils = new Utils();
         ts.leaveReview(user, review, stars, holiday);
         return "";
     }
+
+@PostMapping("/saveForLater")
+@ResponseBody
+     public String saveForLater(@RequestBody List<Map<String,Object>> li, @RequestParam String user){
+        ts.saveForLater(li, user);
+        return "";
+    }
 }

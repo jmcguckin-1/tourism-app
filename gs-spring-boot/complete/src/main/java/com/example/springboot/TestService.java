@@ -273,9 +273,36 @@ public class TestService{
        return gson.toJson(li);
     }
 
+    public void saveForLater(List<Map<String,Object>> li, String user){
+         Firestore db = FirestoreClient.getFirestore();
+         for (Map <String, Object> e: li){
+            e.put("user", user);
+            ApiFuture<DocumentReference> addedFlight = db.collection("saved_bookings").add(e);
+        }
+    }
+
     // bookings they save for later
     public String getSavedBookings(String user){
-        return "";
+           ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("saved_bookings").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (user.equals(ds.get("user"))){
+                  Map<String, Object> savedBooking = ds.getData();
+                  savedBooking.put("id", ds.getId());
+                  li.add(savedBooking);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+
+       return gson.toJson(li);
     }
 
     public String getReviews(String holiday){

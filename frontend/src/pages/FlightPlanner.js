@@ -5,7 +5,8 @@ import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../background.jpg";
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin, Alert, InputNumber, Rate } from 'antd';
+import { Spin, Alert, InputNumber, Rate} from 'antd';
+import Icon from '@ant-design/icons';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import CartPane from "../components/CartPane.js";
 
@@ -62,7 +63,6 @@ onAuthStateChanged(auth, (user) => {
                 if (data){
                     setReviewData(data);
                     if (data.length > 0){
-                        // document.getElementById("reviewData").style.display='block';
                         document.getElementById("reviewsSection").style.display='block';
                         console.log(data);
                     }
@@ -126,6 +126,29 @@ onAuthStateChanged(auth, (user) => {
 
    }
 
+   function save(x){
+       let currentSave = [];
+       for (let i=0; i<flightData.length; i++){
+           if (flightData[i]['id'] === x){
+               currentSave.push(flightData[i]);
+           }
+       }
+
+       fetch("/saveForLater?user=" + email, {
+        "method": "POST",
+        "body": JSON.stringify(currentSave),
+        "headers": {
+        "Content-Type": "application/json"
+        }
+
+       })
+       .then(response => response.json())
+       .then(data => {
+
+       });
+
+   }
+
    function setA(){
     var e = document.getElementById("option2");
     var textVal = e.options[e.selectedIndex].text;
@@ -168,6 +191,7 @@ onAuthStateChanged(auth, (user) => {
                     {flightData.map(function (flight) {
                         return (
                             <div key={flight.id}>
+                                <button onClick={save(flight.id)}>Save for Later</button>
                                 <p>{flight.ft1} - {flight.ft2}</p>
                                 <p>{flight.airline}</p>
                                 <p>{flight.start} to {flight.end}</p>
