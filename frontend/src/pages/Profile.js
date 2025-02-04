@@ -11,6 +11,7 @@ function Profile(){
     const [bookingData, setData] = useState([]);
     const [review, setReview] = useState("");
     const [currentHoliday, setCurrentHoliday] = useState("");
+    const [savedBookings, setSavedBookings] = useState([]);
 
     useEffect(() => {
            const auth = getAuth();
@@ -52,6 +53,16 @@ onAuthStateChanged(auth, (user) => {
             })
     }
 
+    function viewSaved(){
+        fetch("/getSavedBookings?user=" + currentUser)
+            .then(response => response.json())
+            .then(data => {
+                    if (data){
+                        setSavedBookings(data);
+                    }
+            })
+    }
+
     return (
         <div>
             <img src={profileBg} id='profileBg'/>
@@ -60,10 +71,13 @@ onAuthStateChanged(auth, (user) => {
                 <p id='leaveR'>Leave Review on your Holiday</p>
             </div>
 
+            <div id='viewSaved' onClick={viewSaved}>
+                <p id='vSaved'>View Saved Holidays</p>
+            </div>
+
             <div id='reviewForm'>
                 <select id='holidays' onChange={setHoliday}>
                     <>
-
                         {bookingData.map(function (details) {
                             return (
                                 <option key={details.id}>

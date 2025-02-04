@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import 'react-calendar/dist/Calendar.css';
 import myData from '../data.json';
 import background from "../background.jpg";
-import { LoadingOutlined } from '@ant-design/icons';
+import {HeartOutlined, LoadingOutlined} from '@ant-design/icons';
 import { Spin, Alert, InputNumber, Rate} from 'antd';
 import Icon from '@ant-design/icons';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -133,6 +133,7 @@ onAuthStateChanged(auth, (user) => {
                currentSave.push(flightData[i]);
            }
        }
+       console.log(currentSave.length);
 
        fetch("/saveForLater?user=" + email, {
         "method": "POST",
@@ -191,7 +192,7 @@ onAuthStateChanged(auth, (user) => {
                     {flightData.map(function (flight) {
                         return (
                             <div key={flight.id}>
-                                <button onClick={save(flight.id)}>Save for Later</button>
+                                <HeartOutlined onClick={(e) => save(flight.id)}/>
                                 <p>{flight.ft1} - {flight.ft2}</p>
                                 <p>{flight.airline}</p>
                                 <p>{flight.start} to {flight.end}</p>

@@ -275,10 +275,9 @@ public class TestService{
 
     public void saveForLater(List<Map<String,Object>> li, String user){
          Firestore db = FirestoreClient.getFirestore();
-         for (Map <String, Object> e: li){
-            e.put("user", user);
-            ApiFuture<DocumentReference> addedFlight = db.collection("saved_bookings").add(e);
-        }
+         Map a = li.get(0);
+         a.put("user", user);
+         ApiFuture<DocumentReference> addedFlight = db.collection("saved_bookings").add(a);
     }
 
     // bookings they save for later
