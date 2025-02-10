@@ -199,6 +199,27 @@ public class TestService{
                 return true;
             }
             return false;
+    }
+
+    public boolean flightFilters(Map<String,Object> ma, List<Map<String,Object>> li){
+            int match = 0;
+
+            if ((boolean) ma.get("direct") && (boolean) li.get(0).get("direct")){
+                  match += 1;
+            }
+            if ((boolean) ma.get("return") && (boolean) li.get(0).get("return")){
+                  match += 1;
+            }
+
+            if (match == 2){
+                ma.put("match", "Exact Filter Match");
+                return true;
+            }
+            else if (match > 0){
+                ma.put("match", "Not Exact Match, But with Similar Filters");
+                return true;
+            }
+            return false;
 
     }
 
@@ -458,8 +479,7 @@ public class TestService{
         return gson.toJson(map);
     }
 
-    public String getFlights(String start, String end, String startDate, String endDate, boolean direct,
-    boolean oneWay, boolean returnFlight){
+    public String getFlights(String start, String end, String startDate, String endDate, List<Map<String,Object>> list){
        ArrayList<Map<String,Object>> li = new ArrayList<>();
        Gson gson = new Gson();
        try{
@@ -481,7 +501,9 @@ public class TestService{
                     flightData.put("ft2", flightTimeOne);
                     flightData.put("rt1", secondOne);
                     flightData.put("rt2", secondTwo);
-                    li.add(flightData);
+                    if (flightFilters(flightData, list)){
+                        li.add(flightData);
+                    }
                  }
             }
        }
