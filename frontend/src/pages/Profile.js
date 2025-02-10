@@ -54,10 +54,13 @@ onAuthStateChanged(auth, (user) => {
     }
 
     function viewSaved(){
+        document.getElementById("savedBookings").style.display = 'none';
+        document.getElementById("bookingDisplay").style.display = 'block';
         fetch("/getSavedBookings?user=" + currentUser)
             .then(response => response.json())
             .then(data => {
                     if (data){
+                        console.log(data);
                         setSavedBookings(data);
                     }
             })
@@ -65,18 +68,40 @@ onAuthStateChanged(auth, (user) => {
 
     return (
         <div>
-            <img src={profileBg} id='profileBg'/>
+            <img src={profileBg} id='profileBg' alt='bg'/>
             <NavBar/>
             <div id='leaveReview' onClick={reviewView}>
                 <p id='leaveR'>Leave Review on your Holiday</p>
+            </div>
+
+            <div id='savedBookings' onClick={viewSaved}>
+                <p id='sBookings'>View Your Saved Bookings</p>
             </div>
 
             <div id='viewSaved' onClick={viewSaved}>
                 <p id='vSaved'>View Saved Holidays</p>
             </div>
 
+            <div id='bookingDisplay'>
+                 <>
+                {savedBookings.map(function (saved) {
+                            return (
+                                <div key={saved.id}>
+                                    {saved.start} - {saved.end}
+                                    <br/>
+                                    {saved.airline}
+                                    <br/>
+                                    £{saved.price}
+                                </div>
+                            )
+                        })}
+            </>
+            </div>
+
+
+
             <div id='reviewForm'>
-                <select id='holidays' onChange={setHoliday}>
+            <select id='holidays' onChange={setHoliday}>
                     <>
                         {bookingData.map(function (details) {
                             return (

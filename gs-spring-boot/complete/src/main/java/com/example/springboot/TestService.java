@@ -227,15 +227,48 @@ public class TestService{
     }
 
     public String getDetails(String user){
-        // user's name
-        // email
-        // status
-        // reviews left
+      Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("users").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (ds.get("email").equals(user)) {
+              Map map = ds.getData();
+              return gson.toJson(map);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
         return "";
     }
 
     public void leaveReview(String user, String review, int stars, String holiday){
          Firestore db = FirestoreClient.getFirestore();
+
+           try{
+       ApiFuture<QuerySnapshot> future = db.collection("users").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (ds.get("email").equals(user)) {
+                 DocumentReference docRef = db.collection("users").document(ds.getId());
+                 if (ds.getData().containsKey("review_count")){
+                     ApiFuture<WriteResult> future1 = docRef.update("review_count", Integer.valueOf(ds.get("review_count").toString()) + 1);
+                 }
+                 else{
+                      ApiFuture<WriteResult> future1 = docRef.update("review_count", 1);
+                 }
+
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
          Map ma = new HashMap<String,Object>();
          ma.put("user", user);
          ma.put("review", review);

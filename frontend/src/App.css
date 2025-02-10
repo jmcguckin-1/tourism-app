@@ -209,11 +209,16 @@ select, option{
     z-index:5;
 }
 
-#leaveR{
+#leaveR, #sBookings{
     cursor:pointer;
     position: absolute;
     background-color:white;
     padding:1%;
+}
+
+#sBookings{
+    position: absolute;
+    left:35%;
 }
 
 #profileBg{
@@ -234,6 +239,22 @@ select, option{
     overflow-y: scroll;
 }
 
+#bookingDisplay{
+    z-index:10;
+    background-color:white;
+    position:absolute;
+    left:22%;
+    top:20%;
+    padding:1%;
+    max-height:500px;
+    overflow-y: scroll;
+}
+
 #reviewData{
+    display:none;
+}
+
+
+#bookingDisplay{
     display:none;
 }
