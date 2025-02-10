@@ -172,9 +172,40 @@ public class TestService{
 
     }
 
+    public boolean hotelFilters(Map <String,Object> map, List<Map<String,Object>> li){
+            ArrayList<String> al = (ArrayList<String>) map.get("facilities");
+            int match = 0;
+            if (al.size() == 0){
+                return false;
+            }
+            if (al.contains("Single Bed") && (boolean) li.get(0).get("singleBeds")){
+                match += 1;
+            }
+
+            if (al.contains("Wi-Fi") && (boolean) li.get(0).get("wifi")){
+                match += 1;
+            }
+
+            if (al.contains("Pool") && li.get(0).get("pool")){
+                match += 1;
+            }
+
+            if (match == 3){
+                map.put("match", "Exact Filter Match");
+                return true;
+            }
+            else if (match > 0){
+                map.put("match", "Not Exact Match, But with Similar Filters");
+                return true;
+            }
+            return false;
+
+    }
+
     public String getHotels(String destination, String startDate, String endDate, int numAdults,
-    int numChildren){
+    int numChildren, List<Map<String,Object>> list){
         // need firebase user reference in here
+
         ArrayList<Map<String,Object>> li = new ArrayList<>();
         Gson gson = new Gson();
         try{
@@ -187,18 +218,23 @@ public class TestService{
                 Timestamp t1 = (Timestamp) ds.get("end_date");
                 String flightTimeZero = t.toDate().toString();
                 String flightTimeOne = t1.toDate().toString();
+                boolean adults = numAdults == Integer.parseInt(ds.get("adults").toString());
+                boolean children = numChildren == Integer.parseInt(ds.get("children").toString());
                  if (checkDates(flightTimeZero, startDate) && checkDates(flightTimeOne, endDate)){
-                 // add logic for that
-//                     if (numAdults == ds.getInt("adults")){
-//                     }
-                    Map<String, Object> hotelData = ds.getData();
-                    hotelData.put("id", ds.getId());
-                    hotelData.put("user", "John McGuckin");
-                    hotelData.put("day1", flightTimeZero);
-                    hotelData.put("final_day", flightTimeOne);
-                    hotelData.put("st", flightTimeZero);
-                    hotelData.put("end", flightTimeOne);
-                    li.add(hotelData);
+                    if (adults && children){
+                        Map<String, Object> hotelData = ds.getData();
+                        hotelData.put("id", ds.getId());
+                        hotelData.put("user", "John McGuckin");
+                        hotelData.put("day1", flightTimeZero);
+                        hotelData.put("final_day", flightTimeOne);
+                        hotelData.put("st", flightTimeZero);
+                        hotelData.put("end", flightTimeOne);
+                        if (hotelFilters(hotelData, list)){
+                             li.add(hotelData);
+                        }
+
+                    }
+
                  }
             }
        }

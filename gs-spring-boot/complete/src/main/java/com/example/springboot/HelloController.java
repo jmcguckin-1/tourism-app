@@ -39,8 +39,8 @@ public Utils utils = new Utils();
 @GetMapping("/findHotels")
 @ResponseBody
     public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren){
-    return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
+    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren, @RequestParam List<Map<String,Object>> list){
+    return ts.getHotels(destination, startDate, endDate, numAdults, numChildren, list);
 }
 
 @GetMapping("/getCartItems")
