@@ -112,7 +112,7 @@ public class TestService{
               }
         }
          catch (Exception e){
-            System.out.println("this method:" + e);
+            System.out.println(e);
         }
         if (type.equals("flights")){
             Map<String, Object> flightData = flightLi.get(0);
@@ -186,7 +186,7 @@ public class TestService{
                 match += 1;
             }
 
-            if (al.contains("Pool") && li.get(0).get("pool")){
+            if (al.contains("Pool") && (boolean) li.get(0).get("pool")){
                 match += 1;
             }
 
@@ -204,7 +204,6 @@ public class TestService{
 
     public String getHotels(String destination, String startDate, String endDate, int numAdults,
     int numChildren, List<Map<String,Object>> list){
-        // need firebase user reference in here
 
         ArrayList<Map<String,Object>> li = new ArrayList<>();
         Gson gson = new Gson();
@@ -234,7 +233,6 @@ public class TestService{
                         }
 
                     }
-
                  }
             }
        }

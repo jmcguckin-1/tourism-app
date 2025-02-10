@@ -65,7 +65,13 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('formEntry').style.display='none';
     document.getElementById('sendData').style.display='none';
      fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate
-     + "&numAdults=" + numAdults + "&numChildren=" + numChildren + "&facilities=" + facilities)
+     + "&numAdults=" + numAdults + "&numChildren=" + numChildren, {
+         "method": "POST",
+         "headers": {
+             "Content-Type": "application/json"
+         },
+         body: JSON.stringify(facilities)
+     })
     .then(response => response.json())
     .then(data => {
          setTimeout(() => {

@@ -36,10 +36,10 @@ public Utils utils = new Utils();
        direct, oneWay, returnFlight);
     }
 
-@GetMapping("/findHotels")
+@PostMapping("/findHotels")
 @ResponseBody
     public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren, @RequestParam List<Map<String,Object>> list){
+    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren, @RequestBody List<Map<String,Object>> list){
     return ts.getHotels(destination, startDate, endDate, numAdults, numChildren, list);
 }
 
