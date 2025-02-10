@@ -69,4 +69,41 @@ public Utils utils = new Utils();
         return ts.saveBooking(user);
     }
 
+@GetMapping("/getUserDetails")
+@ResponseBody
+    public String getDetails(@RequestParam String user){
+        return ts.getDetails(user);
+    }
+
+@GetMapping("/getBookings")
+@ResponseBody
+    public String getBookings(@RequestParam String user){
+        return ts.getBookings(user);
+    }
+
+@GetMapping("/getSavedBookings")
+@ResponseBody
+    public String getSavedBookings(@RequestParam String user){
+        return ts.getSavedBookings(user);
+    }
+
+@GetMapping("/getReviews")
+@ResponseBody
+    public String getReviews(@RequestParam String holiday){
+        return ts.getReviews(holiday);
+    }
+
+@PostMapping("/leaveReview")
+@ResponseBody
+    public String leaveReview(@RequestParam String user, @RequestParam String review, @RequestParam int stars, @RequestParam String holiday){
+        ts.leaveReview(user, review, stars, holiday);
+        return "";
+    }
+
+@PostMapping("/saveForLater")
+@ResponseBody
+     public String saveForLater(@RequestBody List<Map<String,Object>> li, @RequestParam String user){
+        ts.saveForLater(li, user);
+        return "";
+    }
 }

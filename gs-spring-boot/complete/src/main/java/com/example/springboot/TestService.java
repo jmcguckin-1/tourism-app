@@ -226,6 +226,141 @@ public class TestService{
 
     }
 
+    public String getDetails(String user){
+      Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("users").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (ds.get("email").equals(user)) {
+              Map map = ds.getData();
+              return gson.toJson(map);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+        return "";
+    }
+
+    public void leaveReview(String user, String review, int stars, String holiday){
+         Firestore db = FirestoreClient.getFirestore();
+
+           try{
+       ApiFuture<QuerySnapshot> future = db.collection("users").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (ds.get("email").equals(user)) {
+                 DocumentReference docRef = db.collection("users").document(ds.getId());
+                 if (ds.getData().containsKey("review_count")){
+                     ApiFuture<WriteResult> future1 = docRef.update("review_count", Integer.valueOf(ds.get("review_count").toString()) + 1);
+                 }
+                 else{
+                      ApiFuture<WriteResult> future1 = docRef.update("review_count", 1);
+                 }
+
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+         Map ma = new HashMap<String,Object>();
+         ma.put("user", user);
+         ma.put("review", review);
+         ma.put("stars", stars);
+         ma.put("holiday", holiday);
+         ApiFuture<DocumentReference> addedDocRef = db.collection("reviews").add(ma);
+    }
+
+    // stays they have booked
+    public String getBookings(String user){
+        ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("confirmed_bookings").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            Map<String, Object> ma = (Map<String, Object>) ds.get("flights");
+            if (ma.get("email").equals(user)) {
+              Map map = new HashMap<String, Object>();
+              map.put("id", ma.get("id"));
+              map.put("start", ma.get("start"));
+              map.put("end", ma.get("end"));
+              map.put("ft1", ma.get("ft1"));
+              map.put("rt2", ma.get("rt2"));
+              li.add(map);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+
+       return gson.toJson(li);
+    }
+
+    public void saveForLater(List<Map<String,Object>> li, String user){
+         Firestore db = FirestoreClient.getFirestore();
+         Map a = li.get(0);
+         a.put("user", user);
+         ApiFuture<DocumentReference> addedFlight = db.collection("saved_bookings").add(a);
+    }
+
+    // bookings they save for later
+    public String getSavedBookings(String user){
+           ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("saved_bookings").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (user.equals(ds.get("user"))){
+                  Map<String, Object> savedBooking = ds.getData();
+                  savedBooking.put("id", ds.getId());
+                  li.add(savedBooking);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+
+       return gson.toJson(li);
+    }
+
+    public String getReviews(String holiday){
+         ArrayList<Map<String,Object>> li = new ArrayList<>();
+        Gson gson = new Gson();
+        try{
+             Firestore db = FirestoreClient.getFirestore();
+       ApiFuture<QuerySnapshot> future = db.collection("reviews").get();
+       List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (DocumentSnapshot ds: documents){
+            if (holiday.equals(ds.get("holiday"))){
+                  Map<String, Object> reviewData = ds.getData();
+                  reviewData.put("id", ds.getId());
+                  li.add(reviewData);
+            }
+        }
+       }
+
+        catch(Exception e){
+        System.out.println(e);
+       }
+
+       return gson.toJson(li);
+    }
+
+
     public void removeData(String user, String collection){
          Firestore db = FirestoreClient.getFirestore();
            try{
