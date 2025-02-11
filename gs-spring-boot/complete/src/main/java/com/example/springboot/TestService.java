@@ -112,7 +112,7 @@ public class TestService{
               }
         }
          catch (Exception e){
-            System.out.println("this method:" + e);
+            System.out.println(e);
         }
         if (type.equals("flights")){
             Map<String, Object> flightData = flightLi.get(0);
@@ -172,9 +172,60 @@ public class TestService{
 
     }
 
+    public boolean hotelFilters(Map <String,Object> map, List<Map<String,Object>> li){
+            ArrayList<String> al = (ArrayList<String>) map.get("facilities");
+            int match = 0;
+            if (al.size() == 0){
+                return false;
+            }
+            if (al.contains("Single Bed") && (boolean) li.get(0).get("singleBeds")){
+                match += 1;
+            }
+
+            if (al.contains("Wi-Fi") && (boolean) li.get(0).get("wifi")){
+                match += 1;
+            }
+
+            if (al.contains("Pool") && (boolean) li.get(0).get("pool")){
+                match += 1;
+            }
+
+            if (match == 3){
+                map.put("match", "Exact Filter Match");
+                return true;
+            }
+            else if (match > 0){
+                map.put("match", "Not Exact Match, But with Similar Filters");
+                return true;
+            }
+            return false;
+    }
+
+    public boolean flightFilters(Map<String,Object> ma, List<Map<String,Object>> li){
+            int match = 0;
+
+            if ((boolean) ma.get("direct") && (boolean) li.get(0).get("direct")){
+                  match += 1;
+            }
+            if ((boolean) ma.get("return") && (boolean) li.get(0).get("return")){
+                  match += 1;
+            }
+
+            if (match == 2){
+                ma.put("match", "Exact Filter Match");
+                return true;
+            }
+            else if (match > 0){
+                ma.put("match", "Not Exact Match, But with Similar Filters");
+                return true;
+            }
+            return false;
+
+    }
+
     public String getHotels(String destination, String startDate, String endDate, int numAdults,
-    int numChildren){
-        // need firebase user reference in here
+    int numChildren, List<Map<String,Object>> list){
+
         ArrayList<Map<String,Object>> li = new ArrayList<>();
         Gson gson = new Gson();
         try{
@@ -187,18 +238,22 @@ public class TestService{
                 Timestamp t1 = (Timestamp) ds.get("end_date");
                 String flightTimeZero = t.toDate().toString();
                 String flightTimeOne = t1.toDate().toString();
+                boolean adults = numAdults == Integer.parseInt(ds.get("adults").toString());
+                boolean children = numChildren == Integer.parseInt(ds.get("children").toString());
                  if (checkDates(flightTimeZero, startDate) && checkDates(flightTimeOne, endDate)){
-                 // add logic for that
-//                     if (numAdults == ds.getInt("adults")){
-//                     }
-                    Map<String, Object> hotelData = ds.getData();
-                    hotelData.put("id", ds.getId());
-                    hotelData.put("user", "John McGuckin");
-                    hotelData.put("day1", flightTimeZero);
-                    hotelData.put("final_day", flightTimeOne);
-                    hotelData.put("st", flightTimeZero);
-                    hotelData.put("end", flightTimeOne);
-                    li.add(hotelData);
+                    if (adults && children){
+                        Map<String, Object> hotelData = ds.getData();
+                        hotelData.put("id", ds.getId());
+                        hotelData.put("user", "John McGuckin");
+                        hotelData.put("day1", flightTimeZero);
+                        hotelData.put("final_day", flightTimeOne);
+                        hotelData.put("st", flightTimeZero);
+                        hotelData.put("end", flightTimeOne);
+                        if (hotelFilters(hotelData, list)){
+                             li.add(hotelData);
+                        }
+
+                    }
                  }
             }
        }
@@ -424,8 +479,7 @@ public class TestService{
         return gson.toJson(map);
     }
 
-    public String getFlights(String start, String end, String startDate, String endDate, boolean direct,
-    boolean oneWay, boolean returnFlight){
+    public String getFlights(String start, String end, String startDate, String endDate, int numAdults, int numChildren, List<Map<String,Object>> list){
        ArrayList<Map<String,Object>> li = new ArrayList<>();
        Gson gson = new Gson();
        try{
@@ -440,14 +494,21 @@ public class TestService{
                  String flightTimeOne = al.get(1).toDate().toString();
                  String secondOne = al1.get(0).toDate().toString();
                  String secondTwo = al1.get(1).toDate().toString();
+                 boolean adults = numAdults == Integer.parseInt(ds.get("adults").toString());
+                 boolean children = numChildren == Integer.parseInt(ds.get("children").toString());
                  if (checkDates(flightTimeZero, startDate) && checkDates(secondOne, endDate)){
+                    if (adults && children){
                     Map<String, Object> flightData = ds.getData();
                     flightData.put("id", ds.getId());
                     flightData.put("ft1", flightTimeZero);
                     flightData.put("ft2", flightTimeOne);
                     flightData.put("rt1", secondOne);
                     flightData.put("rt2", secondTwo);
-                    li.add(flightData);
+                        if (flightFilters(flightData, list)){
+                            li.add(flightData);
+                        }
+                    }
+
                  }
             }
        }

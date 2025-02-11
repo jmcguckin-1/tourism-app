@@ -28,19 +28,19 @@ public class HelloController {
 public TestService ts = new TestService();
 public Utils utils = new Utils();
 
-@GetMapping("/findFlights")
+@PostMapping("/findFlights")
 @ResponseBody
-    public String findFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate, @RequestParam String endDate, @RequestParam boolean direct,
-    @RequestParam boolean oneWay, @RequestParam boolean returnFlight) throws Exception{
-       return ts.getFlights(departureAirport, arrivalAirport, startDate, endDate,
-       direct, oneWay, returnFlight);
+    public String findFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate, @RequestParam String endDate,
+    @RequestParam int numAdults, @RequestParam int numChildren, @RequestBody List<Map<String,Object>> list) throws Exception{
+       return ts.getFlights(departureAirport, arrivalAirport, startDate,
+       endDate, numAdults, numChildren, list);
     }
 
-@GetMapping("/findHotels")
+@PostMapping("/findHotels")
 @ResponseBody
     public String findHotels(@RequestParam String destination, @RequestParam String startDate,
-    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren){
-    return ts.getHotels(destination, startDate, endDate, numAdults, numChildren);
+    @RequestParam String endDate, @RequestParam int numAdults, @RequestParam int numChildren, @RequestBody List<Map<String,Object>> list){
+    return ts.getHotels(destination, startDate, endDate, numAdults, numChildren, list);
 }
 
 @GetMapping("/getCartItems")

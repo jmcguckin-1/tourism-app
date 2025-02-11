@@ -16,7 +16,6 @@ function BookingPlanner(){
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [destinationValues, setDValues] = useState([]);
-    const [requests, setRequests] = useState([]);
     const [singleBeds, setSB] = useState(false);
     const [wifi, setWifi] = useState(false);
     const [pool, setPool] = useState(false);
@@ -41,12 +40,12 @@ onAuthStateChanged(auth, (user) => {
 }, []);
 
    function sendData(){
-   let requests = [{
-        "singleBeds": singleBeds,
-        "wifi": wifi,
-        "pool": pool
-   }];
-   setRequests(requests);
+       let facilities = [];
+       facilities.push({
+           "singleBeds": singleBeds,
+           "wifi": wifi,
+           "pool": pool
+       });
 
     if (endDate < startDate){
         document.getElementsByClassName('dateError2')[0].style.display='block';
@@ -66,7 +65,13 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('formEntry').style.display='none';
     document.getElementById('sendData').style.display='none';
      fetch("/findHotels?destination=" + destination + "&startDate=" + startDate + "&endDate=" + endDate
-     + "&numAdults=" + numAdults + "&numChildren=" + numChildren)
+     + "&numAdults=" + numAdults + "&numChildren=" + numChildren, {
+         "method": "POST",
+         "headers": {
+             "Content-Type": "application/json"
+         },
+         body: JSON.stringify(facilities)
+     })
     .then(response => response.json())
     .then(data => {
          setTimeout(() => {
@@ -140,21 +145,23 @@ onAuthStateChanged(auth, (user) => {
      <>
     {hotelData.map(function(hotel) {
       return (
-        <div key={hotel.id}>
-           <p>{hotel.location}</p>
-           <p>{hotel.accomodation_name}</p>
-            <Rate disabled value={hotel.star_rating} />
-            <p>{hotel.st} - {hotel.end}</p>
-             <p>{hotel.adults} adults, {hotel.children} children</p>
-            <p>£{hotel.price}</p>
-            <button>View Info</button>
-            <button onClick={e => basketAdd(hotel.id)}>Add to Basket</button>
-           <br/>
-        </div>
+          <div key={hotel.id}>
+              <p>{hotel.location}</p>
+              <p>{hotel.accomodation_name}</p>
+              <Rate disabled value={hotel.star_rating}/>
+              <p>{hotel.st} - {hotel.end}</p>
+              <p>{hotel.adults} adults, {hotel.children} children</p>
+              <p>£{hotel.price}</p>
+              <p>{hotel.match}</p>
+              <p>{hotel.facilities}</p>
+              <button>View Info</button>
+              <button onClick={e => basketAdd(hotel.id)}>Add to Basket</button>
+              <br/>
+          </div>
       )
     })}
-    </>
-    </div>
+     </>
+          </div>
         <div id="loadingScreenHotels">
             <p>Loading your hotels...</p>
             <Spin indicator={<LoadingOutlined style={{

@@ -70,12 +70,24 @@ onAuthStateChanged(auth, (user) => {
             })
     }
     if (valid){
+        let filters = [
+            {
+                "direct": direct,
+                "return": returnFlight
+            }
+        ];
      document.getElementById('formEntry').style.display='none';
     document.getElementById('addOptions').style.display='none';
     document.getElementById('loadingScreen').style.display='block';
     document.getElementById('sendData').style.display='none';
-    fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + startDate + "&endDate=" + endDate
-      + "&direct=" + direct + "&oneWay=" + oneWay + "&returnFlight=" + returnFlight)
+    fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate="
+        + startDate + "&endDate=" + endDate + "&numAdults=" + numAdults + "&numChildren=" + numChildren, {
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(filters)
+    })
       .then(response => response.json())
       .then(data => {
          setTimeout(() => {
@@ -161,6 +173,20 @@ onAuthStateChanged(auth, (user) => {
     setDA(textVal);
    }
 
+   function returnFl(x){
+       if (x){
+           return "Return";
+       }
+       return "One Way";
+   }
+
+   function directFl(x){
+       if (x){
+           return "Direct Flight";
+       }
+       return "Stops Included";
+   }
+
     function setChoices(x, y){
         let newValues = [];
        for (let i=0; i<myData.length; i++){
@@ -194,6 +220,7 @@ onAuthStateChanged(auth, (user) => {
                             <div key={flight.id}>
                                 <HeartOutlined onClick={(e) => save(flight.id)}/>
                                 <p>{flight.ft1} - {flight.ft2}</p>
+                                <p>{flight.adults} adults and {flight.children} children</p>
                                 <p>{flight.airline}</p>
                                 <p>{flight.start} to {flight.end}</p>
                                 <br/>
@@ -201,6 +228,8 @@ onAuthStateChanged(auth, (user) => {
                                 <p>{flight.rt1} - {flight.rt2}</p>
                                 <p>{flight.end} to {flight.start}</p>
                                 <p>£{flight.price}</p>
+                                <p>{directFl(flight.direct)}</p>
+                                <p>{returnFl(flight.return_flight)}</p>
                                 <button onClick={(e) => addToBasket(flight.id)}>Add to Basket</button>
                                 <br/>
                             </div>
@@ -295,9 +324,6 @@ onAuthStateChanged(auth, (user) => {
                 <br/>
                 <label>Direct Flight: </label> <input type='checkbox' onChange={e => setDirect(e.target.checked)}
                                                       name='flightType'/>
-                <br/>
-                <label>One Way: </label> <input type='checkbox' onChange={e => setOneWay(e.target.checked)}
-                                                name='flightType'/>
                 <br/>
                 <label>Return: </label> <input type='checkbox' onChange={e => setReturn(e.target.checked)}
                                                name='flightType'/>
