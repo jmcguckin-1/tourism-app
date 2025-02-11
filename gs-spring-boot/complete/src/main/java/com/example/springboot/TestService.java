@@ -309,9 +309,9 @@ public class TestService{
         return "";
     }
 
-    public void leaveReview(String user, String review, int stars, String holiday){
+    public String leaveReview(String user, String review, int stars, String holiday){
          Firestore db = FirestoreClient.getFirestore();
-
+        Gson gson = new Gson();
            try{
        ApiFuture<QuerySnapshot> future = db.collection("users").get();
        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
@@ -337,7 +337,10 @@ public class TestService{
          ma.put("review", review);
          ma.put("stars", stars);
          ma.put("holiday", holiday);
+         List<Map<String,Object>> li = new ArrayList<>();
+         li.add(ma);
          ApiFuture<DocumentReference> addedDocRef = db.collection("reviews").add(ma);
+         return gson.toJson(li);
     }
 
     // stays they have booked

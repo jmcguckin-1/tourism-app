@@ -21,7 +21,6 @@ function BookingPlanner(){
     const [pool, setPool] = useState(false);
     const [hotelData, setHD] = useState([]);
     const [valid, setValid] = useState(false);
-    const [chosenData, setCD] = useState([]);
     const [email, setEmail] = useState("");
 
     const onClose = (e) => {

@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {Rate} from "antd";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import profileBg from "../profile.png";
+import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function Profile(){
 
@@ -26,6 +28,7 @@ onAuthStateChanged(auth, (user) => {
     function reviewView(){
         document.getElementById("reviewForm").style.display = 'block';
         document.getElementById("leaveReview").style.display = 'none';
+        document.getElementById("savedBookings").style.display = 'none';
         fetch("/getBookings?user=" + currentUser)
             .then(response => response.json())
             .then(data => {
@@ -39,6 +42,13 @@ onAuthStateChanged(auth, (user) => {
     setCurrentHoliday(textVal);
    }
 
+   function backToPage(){
+          document.getElementById("reviewForm").style.display = 'none';
+          document.getElementById("bookingDisplay").style.display = 'none';
+          document.getElementById("leaveReview").style.display = 'block';
+          document.getElementById("savedBookings").style.display = 'block';
+   }
+
     function sendReview(){
         fetch("/leaveReview?user=" + currentUser + "&review=" + review  + "&stars=" + rating + "&holiday=" + currentHoliday, {
             "method": "POST",
@@ -49,18 +59,18 @@ onAuthStateChanged(auth, (user) => {
         })
             .then(response => response.json())
             .then(data => {
-
+                  alert("review created!");
             })
     }
 
     function viewSaved(){
         document.getElementById("savedBookings").style.display = 'none';
         document.getElementById("bookingDisplay").style.display = 'block';
+        document.getElementById("leaveReview").style.display = 'none';
         fetch("/getSavedBookings?user=" + currentUser)
             .then(response => response.json())
             .then(data => {
                     if (data){
-                        console.log(data);
                         setSavedBookings(data);
                     }
             })
@@ -83,6 +93,8 @@ onAuthStateChanged(auth, (user) => {
             </div>
 
             <div id='bookingDisplay'>
+                <p>Back</p>
+                <FontAwesomeIcon icon={faArrowRight}  className='backArrow' onClick={backToPage}/>
                  <>
                 {savedBookings.map(function (saved) {
                             return (
@@ -99,9 +111,10 @@ onAuthStateChanged(auth, (user) => {
             </div>
 
 
-
             <div id='reviewForm'>
-            <select id='holidays' onChange={setHoliday}>
+                <p>Back</p>
+                <FontAwesomeIcon icon={faArrowRight} className='backArrow' onClick={backToPage}/>
+                <select id='holidays' onChange={setHoliday}>
                     <>
                         {bookingData.map(function (details) {
                             return (
@@ -124,7 +137,7 @@ onAuthStateChanged(auth, (user) => {
                 <Rate value={rating} onChange={setRating}/>
                 <br/>
                 <br/>
-                <button onClick={sendReview}>Place Review</button>
+                <button className='button-19' onClick={sendReview}>Place Review</button>
             </div>
         </div>
     )
