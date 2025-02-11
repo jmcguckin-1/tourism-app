@@ -43,6 +43,18 @@ onAuthStateChanged(auth, (user) => {
 }, []);
 
 
+   function getReviews(){
+        fetch("getReviews?holiday=" + departingAirport + " - " + arrivalAirport)
+            .then(response => response.json())
+            .then(data => {
+                if (data){
+                    setReviewData(data);
+                    if (data.length > 0){
+                        document.getElementById("reviewsSection").style.display='block';
+                    }
+                }
+            })
+    }
    function sendData(){
     if (endDate < startDate){
         document.getElementsByClassName('dateErrorF')[0].style.display='block';
@@ -56,19 +68,6 @@ onAuthStateChanged(auth, (user) => {
         setValid(true);
     }
 
-    function getReviews(){
-        fetch("getReviews?holiday=" + departingAirport + " - " + arrivalAirport)
-            .then(response => response.json())
-            .then(data => {
-                if (data){
-                    setReviewData(data);
-                    if (data.length > 0){
-                        document.getElementById("reviewsSection").style.display='block';
-                        console.log(data);
-                    }
-                }
-            })
-    }
     if (valid){
         let filters = [
             {
@@ -254,7 +253,7 @@ onAuthStateChanged(auth, (user) => {
             </div>
             <div id='formEntry'>
                 <p>Destination</p>
-                <input type='text' onChange={e => setChoices(e.target.value, "dest")}/>
+                <input type='text' id='dest' onChange={e => setChoices(e.target.value, "dest")}/>
                 <select id='option2' onChange={setA}>
                     <>
                         {destOptions.map(function (details) {

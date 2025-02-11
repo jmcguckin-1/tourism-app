@@ -28,19 +28,30 @@ onAuthStateChanged(auth, (user) => {
     }
 
      function viewCart(){
-     document.getElementById("cartPane").style.display='block';
-     document.getElementById("closeCart").style.display='block';
           fetch("/getCartItems?user=" + email + "&type=flights")
     .then(response => response.json())
     .then(data => {
-        setFD(data);
-        setPrice(data[0]['total']);
+        if (!data[0]['error']){
+              setFD(data);
+              setPrice(data[0]['total']);
+        }
+        else{
+            alert("No cart items to display at this time");
+
+        }
+
     })
 
      fetch("/getCartItems?user=" + email + "&type=hotels")
     .then(response => response.json())
     .then(data => {
-        setHD(data);
+         if (!data[0]['error'] && flightData.length > 0){
+             setHD(data);
+              document.getElementById("cartPane").style.display='block';
+              document.getElementById("openCart").style.display='none';
+              document.getElementById("closeCart").style.display='block';
+        }
+
     })
      }
 

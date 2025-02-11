@@ -114,14 +114,22 @@ public class TestService{
          catch (Exception e){
             System.out.println(e);
         }
+        if (li.size() == 0){
+            Map<String, Object> map = new HashMap<>();
+            map.put("error", true);
+            flightLi.add(map);
+            return gson.toJson(flightLi);
+        }
         if (type.equals("flights")){
             Map<String, Object> flightData = flightLi.get(0);
             flightData.put("total", price);
+            flightData.put("error", false);
             return gson.toJson(flightLi);
         }
 
         Map<String, Object> hotel = li.get(0);
         hotel.put("total", price);
+        hotel.put("error", false);
         return gson.toJson(li);
     }
 
