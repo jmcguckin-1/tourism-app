@@ -27,10 +27,13 @@ public class HelloController {
 
 public TestService ts = new TestService();
 public Utils utils = new Utils();
+
 @PostMapping("/findFlights")
 @ResponseBody
-    public String findFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate, @RequestParam String endDate, @RequestBody List<Map<String,Object>> list) throws Exception{
-       return ts.getFlights(departureAirport, arrivalAirport, startDate, endDate, list);
+    public String findFlights(@RequestParam String departureAirport, @RequestParam String arrivalAirport, @RequestParam String startDate, @RequestParam String endDate,
+    @RequestParam int numAdults, @RequestParam int numChildren, @RequestBody List<Map<String,Object>> list) throws Exception{
+       return ts.getFlights(departureAirport, arrivalAirport, startDate,
+       endDate, numAdults, numChildren, list);
     }
 
 @PostMapping("/findHotels")

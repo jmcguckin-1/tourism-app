@@ -479,7 +479,7 @@ public class TestService{
         return gson.toJson(map);
     }
 
-    public String getFlights(String start, String end, String startDate, String endDate, List<Map<String,Object>> list){
+    public String getFlights(String start, String end, String startDate, String endDate, int numAdults, int numChildren, List<Map<String,Object>> list){
        ArrayList<Map<String,Object>> li = new ArrayList<>();
        Gson gson = new Gson();
        try{
@@ -494,16 +494,21 @@ public class TestService{
                  String flightTimeOne = al.get(1).toDate().toString();
                  String secondOne = al1.get(0).toDate().toString();
                  String secondTwo = al1.get(1).toDate().toString();
+                 boolean adults = numAdults == Integer.parseInt(ds.get("adults").toString());
+                 boolean children = numChildren == Integer.parseInt(ds.get("children").toString());
                  if (checkDates(flightTimeZero, startDate) && checkDates(secondOne, endDate)){
+                    if (adults && children){
                     Map<String, Object> flightData = ds.getData();
                     flightData.put("id", ds.getId());
                     flightData.put("ft1", flightTimeZero);
                     flightData.put("ft2", flightTimeOne);
                     flightData.put("rt1", secondOne);
                     flightData.put("rt2", secondTwo);
-                    if (flightFilters(flightData, list)){
-                        li.add(flightData);
+                        if (flightFilters(flightData, list)){
+                            li.add(flightData);
+                        }
                     }
+
                  }
             }
        }

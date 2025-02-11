@@ -80,7 +80,8 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('addOptions').style.display='none';
     document.getElementById('loadingScreen').style.display='block';
     document.getElementById('sendData').style.display='none';
-    fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate=" + startDate + "&endDate=" + endDate, {
+    fetch("/findFlights?departureAirport=" + departingAirport + "&arrivalAirport=" + arrivalAirport + "&startDate="
+        + startDate + "&endDate=" + endDate + "&numAdults=" + numAdults + "&numChildren=" + numChildren, {
         "method": "POST",
         "headers": {
             "Content-Type": "application/json"
@@ -219,6 +220,7 @@ onAuthStateChanged(auth, (user) => {
                             <div key={flight.id}>
                                 <HeartOutlined onClick={(e) => save(flight.id)}/>
                                 <p>{flight.ft1} - {flight.ft2}</p>
+                                <p>{flight.adults} adults and {flight.children} children</p>
                                 <p>{flight.airline}</p>
                                 <p>{flight.start} to {flight.end}</p>
                                 <br/>
