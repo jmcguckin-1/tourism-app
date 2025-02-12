@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {Rate} from 'antd';
+import NavBar from "../components/NavBar";
 
 function Payment(){
     const [flightData, setFD] = useState([]);
@@ -20,6 +21,20 @@ function Payment(){
             .then(data =>{
                     window.open(data["session"]);
             });
+    }
+
+    function discountCheck(){
+        fetch("/getDiscount?amount=" + price + "&email=" + email)
+            .then(response => response.json())
+            .then(data => {
+                if (data['discounted_price'] < price){
+                    alert("Discount applied! (" + data['discounted_price'] + ")");
+                    setPrice(data['discounted_price']);
+                }
+                else{
+                     alert("You are not eligible for discount yet - check your profile to see how close you are");
+                }
+            })
     }
 
     useEffect(() => {
@@ -47,10 +62,7 @@ onAuthStateChanged(auth, (user) => {
     },)
     return (
     <div>
-        <select id='langFeature'>
-            <option>EN</option>
-            <option>SP</option>
-        </select>
+        <NavBar/>
         <div>
         <>
               {flightData.map(function(flight) {
@@ -82,6 +94,7 @@ onAuthStateChanged(auth, (user) => {
     </>
         </div>
        <button id='payment' onClick={payment}>Payment using Stripe</button>
+        <button onClick={discountCheck}>Eligible for discount?</button>
     </div>
 
     )

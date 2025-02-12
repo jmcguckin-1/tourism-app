@@ -426,8 +426,37 @@ public class TestService{
        return gson.toJson(li);
     }
 
-    public String loyaltyDiscount(){
-        return "";
+    public String loyaltyDiscount(int amount, String email){
+         Firestore db = FirestoreClient.getFirestore();
+         Gson gson = new Gson();
+         boolean discount = false;
+         DocumentReference dr = null;
+           try{
+             ApiFuture<QuerySnapshot> future3 = db.collection("users").get();
+              List<QueryDocumentSnapshot> documents = future3.get().getDocuments();
+                for (DocumentSnapshot ds: documents){
+                   if (ds.getString("email").equals(email)){
+                        dr = db.collection("users").document(ds.getId());
+                        if (Integer.parseInt(ds.get("loyalty").toString()) == 10){
+                            discount = true;
+                        }
+                   }
+                }
+
+             }
+             catch(Exception e){
+             System.out.println(e);
+             }
+              Map ma = new HashMap<String,Object>();
+             if (discount){
+                dr.update("loyalty", 0);
+                double finalPrice = amount - (amount*0.1);
+                ma.put("discounted_price", finalPrice);
+             }
+             else{
+                ma.put("discounted_price", amount);
+             }
+        return gson.toJson(ma);
     }
 
     public void removeData(String user, String collection){

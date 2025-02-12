@@ -356,10 +356,10 @@ input:focus{
       z-index:10;
     background-color:white;
     position:absolute;
-    bottom:22%;
+    bottom:24%;
     left:22%;
     padding:1%;
-    max-height:500px;
+    max-height:100px;
     overflow-y: scroll;
 }
 

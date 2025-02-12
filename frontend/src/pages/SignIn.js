@@ -51,7 +51,7 @@ function SignIn(){
                 <button onClick={signUp} className='button-19'>Sign Up</button>
                 <br/>
                 <br/>
-                <NavLink to='/login' className='navlink'>Have an account? Sign In!</NavLink>
+                <NavLink to='/login'>Have an account? Sign In!</NavLink>
             </div>
         </div>
 

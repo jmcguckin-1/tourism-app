@@ -106,4 +106,11 @@ public Utils utils = new Utils();
         ts.saveForLater(li, user);
         return "";
     }
+
+@GetMapping("/getDiscount")
+@ResponseBody
+    public String loyaltyDiscount(@RequestParam int amount, @RequestParam String email){
+        return ts.loyaltyDiscount(amount, email);
+    }
+
 }

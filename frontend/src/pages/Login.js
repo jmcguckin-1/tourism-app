@@ -33,7 +33,7 @@ signInWithEmailAndPassword(auth, email, password)
                 <button onClick={signIn} className='button-19'>Sign In</button>
                 <br/>
                 <br/>
-                <NavLink to='/' className='navlink'>Need to sign up? Click here!</NavLink>
+                <NavLink to='/'>Need to sign up? Click here!</NavLink>
             </div>
         </div>
 
