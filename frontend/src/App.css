@@ -390,3 +390,12 @@ input:focus{
 #bookingDisplay{
     display:none;
 }
+
+#level{
+    background-color: white;
+    z-index:10;
+    position: absolute;
+    padding:1.5%;
+    right:2%;
+    border-radius:20%;
+}

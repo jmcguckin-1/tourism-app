@@ -6,7 +6,6 @@ import myData from '../data.json';
 import background from "../background.jpg";
 import {HeartOutlined, LoadingOutlined} from '@ant-design/icons';
 import { Spin, Alert, InputNumber, Rate} from 'antd';
-import Icon from '@ant-design/icons';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import CartPane from "../components/CartPane.js";
 
@@ -21,7 +20,6 @@ function FlightPlanner(){
     const [departOptions, setDepValues] = useState([]);
     const [flightData, setFD] = useState([]);
     const [direct, setDirect] = useState(false);
-    const [oneWay, setOneWay] = useState(false);
     const [returnFlight, setReturn] = useState(false);
     const [valid, setValid] = useState(false);
     const [email, setEmail] = useState("");
@@ -35,7 +33,6 @@ useEffect(() => {
     const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    const uid = user.uid;
     const email = user.email;
     setEmail(email);
   }

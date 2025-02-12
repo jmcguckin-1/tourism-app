@@ -1,6 +1,6 @@
 import NavBar from "../components/NavBar.js";
 import {useEffect, useState} from "react";
-import {Rate} from "antd";
+import {Rate, Progress} from "antd";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import profileBg from "../profile.png";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +14,10 @@ function Profile(){
     const [review, setReview] = useState("");
     const [currentHoliday, setCurrentHoliday] = useState("");
     const [savedBookings, setSavedBookings] = useState([]);
-
+    const [loyalty, setLoyalty] = useState(0);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [reviewsGiven, setRG] = useState(0);
     useEffect(() => {
            const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
@@ -23,7 +26,21 @@ onAuthStateChanged(auth, (user) => {
     setCU(email);
   }
 });
-    },[])
+    },[]);
+
+    useEffect(() => {
+        fetch("/getUserDetails?user=jmcguckin308@gmail.com")
+            .then(response => response.json())
+            .then(data => {
+                if (data['loyalty'] >= 0){
+                      setLoyalty(data['loyalty']);
+                      setName(data['name']);
+                      setEmail(data['email']);
+                      setRG(data['review_count']);
+                }
+
+            })
+    })
 
     function reviewView(){
         document.getElementById("reviewForm").style.display = 'block';
@@ -91,6 +108,15 @@ onAuthStateChanged(auth, (user) => {
             <div id='viewSaved' onClick={viewSaved}>
                 <p id='vSaved'>View Saved Holidays</p>
             </div>
+
+            <div id='level'>
+                <p>{name}</p>
+                <p>{email}</p>
+                <p>{reviewsGiven} reviews given</p>
+                <p>Loyalty Level</p>
+                <Progress type="circle" percent={(loyalty / 10) * 100}/>
+            </div>
+
 
             <div id='bookingDisplay'>
                 <p>Back</p>

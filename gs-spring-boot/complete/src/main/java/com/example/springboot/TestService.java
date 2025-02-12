@@ -426,6 +426,9 @@ public class TestService{
        return gson.toJson(li);
     }
 
+    public String loyaltyDiscount(){
+        return "";
+    }
 
     public void removeData(String user, String collection){
          Firestore db = FirestoreClient.getFirestore();
@@ -479,6 +482,14 @@ public class TestService{
 
         ApiFuture<WriteResult> future = docRef.update("hotel_added", false);
         ApiFuture<WriteResult> future2 = docRef.update("flight_added", false);
+        DocumentSnapshot ds = (DocumentSnapshot) docRef.get();
+        if (ds.getData().containsKey("loyalty")){
+            ApiFuture<WriteResult> future3 = docRef.update("loyalty", Integer.parseInt(ds.get("loyalty").toString()) + 1);
+        }
+        else{
+            ApiFuture<WriteResult> future3 = docRef.update("loyalty", 1);
+        }
+
         success = true;
 
         removeData(user, "flight_bookings");
